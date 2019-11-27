@@ -2,8 +2,10 @@
 using DifferentialEquations, BenchmarkTools;
 include("./pkode.jl")
 using Main.point_kinetics
-using JLD;
+# using JLD;
+using FileIO;
 using Statistics;
+using Serialization;
 
 
 # ImplicitMidpoint()
@@ -20,10 +22,12 @@ function build_all_cases()
         tolerances = [10.0^(-i) for i in 2:12]
 
         ## Compile all relevant solver options
-        solver_algs = solvers["SDIRK"]
+        # solver_algs = solvers["SDIRK"]
+        solver_algs = [Rosenbrock23]
 
         ## External Reactivity Functions
-        reactivities = [t -> tanh(t - 50.) * 1.e-4]
+        # reactivities = [t -> (tanh(t - 50.) + 1.) * 5.e-4  t -> t > 50. ? 1.e-3 : 0.
+        reactivities = [t -> (tanh((t - 50.)*1e-1) + 1.) * 40.e-4  ]#t -> t > 50. ? 8.e-3 : 0.]
 
         # cases = [(c1, c2, c3, c4, [1:0.1:100]) for c1 in reactivities
         #                         for c2 in solver_algs for c3 in tolerances for c4 in tolerances]
@@ -32,6 +36,8 @@ function build_all_cases()
         # cases = [(c1, c2, c3, [t for t in 1:0.1:100])  for c1 in reactivities for c3 in tolerances for c2 in solver_algs]
         cases
 end
+
+plot(map(t -> (tanh((t - 50.)*5e-1) + 1.) * 40.e-4, 1:.1:100))
 
 function benchmark_ODE_case(case)
         # ρ, alg, atol, rtol, saveat = case
@@ -55,19 +61,23 @@ function benchmark_ODE_case(case)
         tspan = (0., 100.)
 
         problem = ODEProblem(point_kinetics.pk!, u0, tspan, p)
-        sol = solve(problem, alg(), abstol=atol, saveat=saveat, save_everystep=false)
-
-        bm = @benchmark solve($problem, $alg(), abstol=$atol, saveat=$saveat, save_everystem=false) #reltol=$rtol, saveat=$saveat)
+        # sol = solve(problem, alg(), abstol=atol, reltol=atol, saveat=saveat, save_everystep=false, dtmin=1e-12)
+        sol = nothing
+        bm = @benchmark solve($problem, $alg(), abstol=$atol, reltol=$atol, saveat=$saveat, save_everystem=false, dtmin=0.0) #reltol=$rtol, saveat=$saveat)
 
         case, bm, sol
 end
 
 cases = build_all_cases()
 
+# plot(map(t->(tanh(t-50.)+1)*1.e-4, 1:.1:100))
+
+
 
 function calc_all_benchmarks()
         benchmarks = Array{Any, 1}(undef, length(cases))
         idx = 1
+        num_cases = length(cases)
         for case in cases
 
                 case, bm, sol = benchmark_ODE_case(case)
@@ -75,14 +85,75 @@ function calc_all_benchmarks()
                 alg = case[2]
                 tol = case[3]
                 median_time = median(bm.times)
-                println("$idx / 143  Completed: (alg, tol, median time) = $alg, $tol, $median_time")
+                println("$idx / $num_cases  Completed: (alg, tol, median time) = $alg, $tol, $median_time")
 
                 benchmarks[idx] = (case, bm, sol)
 
                 idx += 1
+
         end
-        save("benchmarks/SDIRKs/benchmarks.jld", "bm", benchmarks)
+        # cur_dir = pwd()
+        # open("$cur_dir/benchmarks/SDIRKs/benchmarks.jld", "w") do io
+        #         write(io, benchmarks)
+        # end;
         benchmarks
 end
 
 benchmarks = calc_all_benchmarks()
+serialize("benchmarks/SDIRKs/benchmarks.dat", benchmarks)
+
+#https://benchmarks.juliadiffeq.org/html/StiffODE/VanDerPol.html
+
+
+using Plots;
+
+# scatter([mean(benchmarks[i][2].times) for i in 1:length(benchmarks)], [benchmarks[i][1][3] for i in 1:length(benchmarks)], yaxis=:log)
+
+
+function group_by_alg(alg)
+
+        tols = Array{Float64, 1}(undef, length(benchmarks))
+        times = Array{Float64, 1}(undef, length(benchmarks))
+
+        idx = 1
+        for (case, bm, sol) in benchmarks
+                if case[2] != alg
+                        continue
+                end
+                tols[idx] = case[3]
+                times[idx] = mean(bm.times)
+                idx += 1
+
+        end
+        tols, times
+end
+
+function group_powers_by_alg(alg)
+        sols = Array{Array{Float64, }, 1}(undef, length(benchmarks))
+
+        idx = 1
+        for (case, bm, sol) in benchmarks
+                reac = case[1](100)
+                tol = case[3]
+                nreject = sol.destats.nreject
+                maxeig = sol.destats.maxeig
+                # println(length(sol))
+                println("CASE: reac: $reac, tol: $tol, num_reject: $nreject, maxeig: $maxeig")
+                # println(case[1], case[3], sol.destats.nreject, sol.destats.maxeig)
+                if case[2] != alg
+                        continue
+                end
+
+                sols[idx] = hcat(sol.u...)[1,:]
+                idx += 1
+        end
+        hcat(sols...)
+end
+
+
+
+sols = group_powers_by_alg(KenCarp3)
+tols, times = group_by_alg(KenCarp3)
+plot(sols[450:600,11:11:end])
+scatter(tols[1:11], times[1:11], xaxis=:log)
+scatter!(tols[12:end], times[12:end], xaxis=:log)
