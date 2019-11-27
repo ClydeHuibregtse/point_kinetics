@@ -1,18 +1,23 @@
 
 using DifferentialEquations, BenchmarkTools;
-# include("./pkode.jl")
+include("./pkode.jl")
+using Main.point_kinetics
+using JLD;
+using Statistics;
 
 
+# ImplicitMidpoint()
 
-solvers = Dict("SDIRK" => [ImplicitEuler(), ImplicitMidpoint(), Trapezoid(), TRBDF2(), SDIRK2(),
-                Kvaerno3(), KenCarp3(), Cash4(), Hairer4(), Hairer42(), Kvaerno4(), KenCarp4(),
-                Kvaerno5(), KenCarp5()],
+
+solvers = Dict("SDIRK" => [ImplicitEuler, Trapezoid, TRBDF2, SDIRK2,
+                Kvaerno3, KenCarp3, Cash4, Hairer4, Hairer42, Kvaerno4, KenCarp4,
+                Kvaerno5, KenCarp5],
                 )
 
 function build_all_cases()
 
         ## Generatre all tolerance options
-        tolerances = [10.0^(-i) for i in 4:12]
+        tolerances = [10.0^(-i) for i in 2:12]
 
         ## Compile all relevant solver options
         solver_algs = solvers["SDIRK"]
@@ -24,11 +29,11 @@ function build_all_cases()
         #                         for c2 in solver_algs for c3 in tolerances for c4 in tolerances]
         cases = [(c1, c2, c3, [t for t in 1:0.1:100]) for c1 in reactivities
                                 for c2 in solver_algs for c3 in tolerances]
-
+        # cases = [(c1, c2, c3, [t for t in 1:0.1:100])  for c1 in reactivities for c3 in tolerances for c2 in solver_algs]
         cases
 end
 
-function build_ODE_problem(case)
+function benchmark_ODE_case(case)
         # ρ, alg, atol, rtol, saveat = case
         ρ, alg, atol, saveat = case
 
@@ -49,29 +54,35 @@ function build_ODE_problem(case)
         ## Timespan Setting
         tspan = (0., 100.)
 
-        problem = ODEProblem(pk!, u0, tspan, p)
-        sol = solve(problem, alg, abstol=atol, saveat=saveat, save_everystep=false)
+        problem = ODEProblem(point_kinetics.pk!, u0, tspan, p)
+        sol = solve(problem, alg(), abstol=atol, saveat=saveat, save_everystep=false)
 
-        bm = @benchmark solve($problem, $alg, abstol=$atol, saveat=$saveat, save_everystem=false) #reltol=$rtol, saveat=$saveat)
+        bm = @benchmark solve($problem, $alg(), abstol=$atol, saveat=$saveat, save_everystem=false) #reltol=$rtol, saveat=$saveat)
 
         case, bm, sol
 end
 
 cases = build_all_cases()
 
-# build_ODE_problem(cases[1])
 
 function calc_all_benchmarks()
         benchmarks = Array{Any, 1}(undef, length(cases))
         idx = 1
         for case in cases
-                println(idx)
-                bm = build_ODE_problem(case)
-                benchmarks[idx] = bm
+
+                case, bm, sol = benchmark_ODE_case(case)
+
+                alg = case[2]
+                tol = case[3]
+                median_time = median(bm.times)
+                println("$idx / 143  Completed: (alg, tol, median time) = $alg, $tol, $median_time")
+
+                benchmarks[idx] = (case, bm, sol)
 
                 idx += 1
         end
+        save("benchmarks/SDIRKs/benchmarks.jld", "bm", benchmarks)
         benchmarks
 end
 
-calc_all_benchmarks()
+benchmarks = calc_all_benchmarks()

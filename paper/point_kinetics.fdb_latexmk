@@ -1,15 +1,14 @@
 # Fdb version 3
-["bibtex point_kinetics"] 1574745608 "point_kinetics.aux" "point_kinetics.bbl" "point_kinetics" 1574745609
+["bibtex point_kinetics"] 1574745608 "point_kinetics.aux" "point_kinetics.bbl" "point_kinetics" 1574831662
   "./siamplain.bst" 1513410828 20531 ef6f3107f7af4d96076bfe8cb3ffd389 ""
   "point_kinetics.aux" 1574745608 3796 83110c47c8e3abf7649e8d4737cd08e9 ""
   "point_kinetics.bcf" 0 -1 0 ""
   "references.bib" 1478289890 3700 4cbc971ab880666aac1acb084de36dcc ""
   (generated)
-  "point_kinetics.bbl"
   "point_kinetics.blg"
-["pdflatex"] 1574745608 "point_kinetics.tex" "/home/clyde/Documents/MIT/point_kinetics/siam_temp/point_kinetics.pdf" "point_kinetics" 1574745609
+  "point_kinetics.bbl"
+["pdflatex"] 1574831662 "point_kinetics.tex" "point_kinetics.pdf" "point_kinetics" 1574831662
   "/etc/texmf/web2c/texmf.cnf" 1574743895 475 c0e671620eb5563b2130f56340a5fde8 ""
-  "/home/clyde/Documents/MIT/point_kinetics/siam_temp/point_kinetics.aux" 1574745608 3796 83110c47c8e3abf7649e8d4737cd08e9 ""
   "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map" 1511824771 3332 103109f5612ad95229751940c61aada0 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmbsy5.tfm" 1480098698 1120 1e8878807317373affa7f7bba4cf2f6a ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmbsy7.tfm" 1480098698 1120 7f9f170e8aa57527ad6c49feafd45d54 ""
@@ -114,13 +113,13 @@
   "point_kinetics.aux" 1574745608 3796 83110c47c8e3abf7649e8d4737cd08e9 ""
   "point_kinetics.bbl" 1574745608 197 04930de4e17ef2aaf1d33cae4f331e8c "bibtex point_kinetics"
   "point_kinetics.out" 1574745608 470 5cf4490625a843e1b709bdf5ad194f41 ""
-  "point_kinetics.tex" 1574745608 7085 63e248e89c3175bed015ae47b776ae5f ""
+  "point_kinetics.tex" 1574831662 6624 945ea0ee83d998b03c18c3d81466e68d ""
   "siamart171218.cls" 1513617632 52399 c5dd28231f892a4eb7f50de27fa71160 ""
   (generated)
+  "/home/clyde/Documents/MIT/point_kinetics/siam_temp/point_kinetics.pdf"
+  "point_kinetics.aux"
   "/home/clyde/Documents/MIT/point_kinetics/siam_temp/point_kinetics.log"
   "point_kinetics.log"
-  "/home/clyde/Documents/MIT/point_kinetics/siam_temp/point_kinetics.pdf"
-  "point_kinetics.pdf"
   "point_kinetics.thm"
-  "point_kinetics.aux"
   "point_kinetics.out"
+  "point_kinetics.pdf"
