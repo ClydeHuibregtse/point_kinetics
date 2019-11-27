@@ -1,3 +1,4 @@
+
 using DifferentialEquations, BenchmarkTools;
 # using DSP, Knet, ImageFiltering;
 using ImageFiltering;
@@ -44,11 +45,15 @@ end
 n = 12
 T = zeros(n,n)
 # T[Int(floor(n/2)+1),Int(floor(n/2)+1)] = 100.
+T[5,5] = 100.
 # T[Int(floor(n/2)+1),Int(floor(n/2)+50)] = 100.
 
 C = ones(n,n)
+C[5,2:end-1] .= 1e-1
+
 Q = zeros(n,n)
-Q[5,5] = 1.
+
+# Q[5,5] = 1.
 A = ones(n,n)
 
 K =  [ 0 1 0; 1 -4 1; 0 1 0.]
@@ -78,28 +83,12 @@ cnn_prob = ODEProblem(heat_transfer_CNN!, T_ch, tspan, p_cnn)
 cnn_sol = solve(cnn_prob)
 
 
-
-
-
-@gif for t in 1:length(loop_sol)
-    heatmap(loop_sol[t])
-end
-
-@gif for t in 1:length(conv_sol)
-    heatmap(conv_sol[t])
-end
-
 cnn_out = convert(Array{Float64}, cnn_sol)
 
 
 @gif for t in 1:size(cnn_sol)[end]
     heatmap(cnn_out[:,:,1,1,t])
 end
-
-
-
-
-
 
 
 
@@ -114,3 +103,10 @@ end
 # @benchmark solve(conv_prob)
 #
 # @benchmark solve(cnn_prob)
+# @gif for t in 1:length(loop_sol)
+#     heatmap(loop_sol[t])
+# end
+#
+# @gif for t in 1:length(conv_sol)
+#     heatmap(conv_sol[t])
+# end
