@@ -3,9 +3,9 @@ using LinearAlgebra, BenchmarkTools;
 
 
 function pk!(du, u, p, t)
-    ρ = @view p[1]
-    Λ = @view p[2]
-    β = @view p[3]
+    ρ = p[1]
+    Λ = p[2]
+    β =  p[3]
     lams = @view p[4:9]
     bets = @view p[10:end]
 
@@ -19,7 +19,7 @@ function pk!(du, u, p, t)
 
 end
 
-tspan = (0.,500.)
+tspan = (0.,100.)
 
 delayed_neutron_fractions = [9, 87, 70, 140, 60, 55] * 1.e-5
 precursor_tcs = [0.0124, 0.0305, 0.111, 0.301, 1.14, 3.01]
@@ -32,9 +32,6 @@ ext_reac(t) = 0
 # p = Array{Any, 1}
 p = [ext_reac, mean_generation_time, sum(delayed_neutron_fractions)]#, precursor_tcs, delayed_neutron_fractions]
 p = vcat(p, precursor_tcs, delayed_neutron_fractions)
-
-
-
 
 
 u0 = delayed_neutron_fractions ./ (mean_generation_time .* precursor_tcs)
