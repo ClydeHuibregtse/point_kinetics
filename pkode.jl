@@ -1,13 +1,23 @@
 using DifferentialEquations, Plots;
 using LinearAlgebra, BenchmarkTools;
+using Profile;
+using Winston;
 
 module point_kinetics
+    struct PKparams
+        ρ
+        Λ::Float64
+        β::Float64
+        lams::Array{Float64, 1}
+        bets::Array{Float64, 1}
+    end
+
     function pk!(du, u, p, t)
-        ρ = p[1]
-        Λ = p[2]
-        β =  p[3]
-        lams = @view p[4:9]
-        bets = @view p[10:end]
+        ρ = p.ρ
+        Λ = p.Λ
+        β =  p.β
+        lams = p.lams
+        bets = p.bets
 
 
         prec_conc = @view u[2:end]
@@ -17,31 +27,59 @@ module point_kinetics
 
         d_prec_conc .= bets .* u[1] ./ Λ .- lams .* prec_conc
 
+
     end
+    export pk!, PKparams
+
 end
 
+workspace()
+reload("point_kinetics")
+using .point_kinetics;
+
+#
+tspan = (0.,100.)
+
+delayed_neutron_fractions = [9, 87, 70, 140, 60, 55] * 1.e-5
+precursor_tcs = [0.0124, 0.0305, 0.111, 0.301, 1.14, 3.01]
+mean_generation_time = 1.e-5
+#
+ext_reac(t) =    t > 50. ? -1.e-2 : 0. #shutdown
+ext_reac(t) = (tanh.((t .- 50.).*1e-1) .+ 1.) .* 40.e-4
+# ext_reac(t) = (tanh.((t .- 50.).*1e-1) .+ 1.) .* 5.e-4
 
 
-# tspan = (0.,100.)
+# plot(ext_reac(1:0.1:100))
+
+p = point_kinetics.PKparams(ext_reac, mean_generation_time,
+                    sum(delayed_neutron_fractions), precursor_tcs, delayed_neutron_fractions)
+
+u0 = delayed_neutron_fractions ./ (mean_generation_time .* precursor_tcs)
+u0 = vcat([1.],u0)
+
+prob = ODEProblem(point_kinetics.pk!, u0, tspan, p)
 #
-# delayed_neutron_fractions = [9, 87, 70, 140, 60, 55] * 1.e-5
-# precursor_tcs = [0.0124, 0.0305, 0.111, 0.301, 1.14, 3.01]
-# mean_generation_time = 1.e-5
+sol = solve(prob, Tsit5())
 #
-# ext_reac(t) =  t > 50. ? -1.e-2 : 0 #shutdown
-# ext_reac(t) =  t > 50. || t < 10. ? 1e-12 : 1e-4 #step insertion
-# ext_reac(t) = 0
+# plot(sol[1:end], vars=(1))
 #
-# # p = Array{Any, 1}
-# p = [ext_reac, mean_generation_time, sum(delayed_neutron_fractions)]#, precursor_tcs, delayed_neutron_fractions]
-# p = vcat(p, precursor_tcs, delayed_neutron_fractions)
+# @profile for i in 1:100 solve(prob, Tsit5(), save_everystep=false) end
 #
 #
-# u0 = delayed_neutron_fractions ./ (mean_generation_time .* precursor_tcs)
-# u0 = vcat([1.],u0)
+# using Traceur;
+# @trace sol = solve(prob, Tsit5())
 #
-# prob = ODEProblem(pk!, u0, tspan, p)
+# Juno.profiler()
+# Profile.clear()
 #
+#
+#
+#
+#
+#
+#
+a = 1
+
 # @benchmark solve(prob, TRBDF2())
 # @benchmark solve(prob, ImplicitEuler())
 # @benchmark solve(prob, Kvaerno5())
@@ -62,7 +100,7 @@ end
 # dp[1]
 # plot(param_sol.t, dp[1]')
 #
-# 
+#
 # using ForwardDiff, Calculus;
 # function test(p)
 #     prob = ODEProblem(pk!, u0, tspan, p)

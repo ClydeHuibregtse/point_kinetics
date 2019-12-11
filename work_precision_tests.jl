@@ -2,13 +2,9 @@
 using DifferentialEquations, BenchmarkTools;
 include("./pkode.jl")
 using Main.point_kinetics
-# using JLD;
-using FileIO;
 using Statistics;
 using Serialization;
-
-
-# ImplicitMidpoint()
+using Sundials;
 
 
 solvers = Dict("SDIRK" => [ImplicitEuler, Trapezoid, TRBDF2, SDIRK2,
@@ -19,15 +15,19 @@ solvers = Dict("SDIRK" => [ImplicitEuler, Trapezoid, TRBDF2, SDIRK2,
 function build_all_cases()
 
         ## Generatre all tolerance options
-        tolerances = [10.0^(-i) for i in 2:12]
+        # tolerances = [10.0^(-i) for i in 2:12]
+        tolerances = [10.0^(-i) for i in 5:5]
 
         ## Compile all relevant solver options
         # solver_algs = solvers["SDIRK"]
-        solver_algs = [Rosenbrock23]
+        solver_algs = [CVODE_BDF]
 
         ## External Reactivity Functions
-        # reactivities = [t -> (tanh(t - 50.) + 1.) * 5.e-4  t -> t > 50. ? 1.e-3 : 0.
-        reactivities = [t -> (tanh((t - 50.)*1e-1) + 1.) * 40.e-4  ]#t -> t > 50. ? 8.e-3 : 0.]
+        # inserted_react = 1.e-3
+        inserted_react = 8.e-3
+        reactivities = [t -> t > 50. ? inserted_react : 0.]
+        # reactivities = [t -> (tanh((t - 50.)*1e-4) + 1.) * inserted_react / 2.  t -> t > 50. ? inserted_react : 0.]
+        # reactivities = [t -> (tanh((t - 50.)*1e-1) + 1.) * 40.e-4  , t -> t > 50. ? 8.e-3 : 0.]
 
         # cases = [(c1, c2, c3, c4, [1:0.1:100]) for c1 in reactivities
         #                         for c2 in solver_algs for c3 in tolerances for c4 in tolerances]
@@ -37,7 +37,7 @@ function build_all_cases()
         cases
 end
 
-plot(map(t -> (tanh((t - 50.)*5e-1) + 1.) * 40.e-4, 1:.1:100))
+# plot(map(t -> (tanh((t - 50.)*5e-1) + 1.) * 40.e-4, 1:.1:100))
 
 function benchmark_ODE_case(case)
         # ρ, alg, atol, rtol, saveat = case
@@ -60,11 +60,17 @@ function benchmark_ODE_case(case)
         ## Timespan Setting
         tspan = (0., 100.)
 
-        problem = ODEProblem(point_kinetics.pk!, u0, tspan, p)
-        # sol = solve(problem, alg(), abstol=atol, reltol=atol, saveat=saveat, save_everystep=false, dtmin=1e-12)
-        sol = nothing
-        bm = @benchmark solve($problem, $alg(), abstol=$atol, reltol=$atol, saveat=$saveat, save_everystem=false, dtmin=0.0) #reltol=$rtol, saveat=$saveat)
+        condition(u, t, integrator) = t - 50.
+        affect!(integrator) = nothing
+        cb = ContinuousCallback(condition,affect!,save_positions=(false,false))
 
+
+        problem = ODEProblem(point_kinetics.pk!, u0, tspan, p)
+        sol = solve(problem, alg(), abstol=atol, reltol=atol, saveat=saveat, callback=cb)#, save_everystep=false, dtmin=1e-12)
+        # sol = nothing
+        # bm = @benchmark solve($problem, $alg(), abstol=$atol, reltol=$atol, saveat=$saveat, callback=cb)#,
+                                # save_everystep=true, dtmin=0.0, force_dtmin=true) #reltol=$rtol, saveat=$saveat)
+        bm = nothing
         case, bm, sol
 end
 
@@ -84,7 +90,8 @@ function calc_all_benchmarks()
 
                 alg = case[2]
                 tol = case[3]
-                median_time = median(bm.times)
+                # median_time = median(bm.times)
+                median_time = 0
                 println("$idx / $num_cases  Completed: (alg, tol, median time) = $alg, $tol, $median_time")
 
                 benchmarks[idx] = (case, bm, sol)
@@ -137,7 +144,7 @@ function group_powers_by_alg(alg)
                 tol = case[3]
                 nreject = sol.destats.nreject
                 maxeig = sol.destats.maxeig
-                # println(length(sol))
+                println(length(sol.u))
                 println("CASE: reac: $reac, tol: $tol, num_reject: $nreject, maxeig: $maxeig")
                 # println(case[1], case[3], sol.destats.nreject, sol.destats.maxeig)
                 if case[2] != alg
@@ -152,8 +159,18 @@ end
 
 
 
+
+plot(1.:0.1:100, benchmarks[1][end](1.:0.1:100)[1,:])
+
+
 sols = group_powers_by_alg(KenCarp3)
 tols, times = group_by_alg(KenCarp3)
-plot(sols[450:600,11:11:end])
+# plot(sols[450:600,11:11:end])
+plot(sols[450:550,:])
+plot!(map(t -> (t > 50. ? 1e-3 : 0.), 0:0.1:100)[450:550])
+
+map(t -> (t > 50. ? 1e-3 : 0.), 0:0.1:100)[450:550]
+
+
 scatter(tols[1:11], times[1:11], xaxis=:log)
 scatter!(tols[12:end], times[12:end], xaxis=:log)
