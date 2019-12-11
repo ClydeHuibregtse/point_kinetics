@@ -1,9 +1,9 @@
-\BOOKMARK [1][-]{section.1}{Introduction}{}% 1
-\BOOKMARK [1][-]{section.2}{Main results}{}% 2
-\BOOKMARK [1][-]{section.11}{Algorithm}{}% 3
-\BOOKMARK [1][-]{section.21}{Experimental results}{}% 4
-\BOOKMARK [1][-]{section.24}{Discussion of Z = X union Y}{}% 5
-\BOOKMARK [1][-]{section.25}{Conclusions}{}% 6
-\BOOKMARK [1][-]{appendix.26}{Appendix A. An example appendix}{}% 7
-\BOOKMARK [1][-]{theorem.27}{Acknowledgments}{}% 8
-\BOOKMARK [1][-]{theorem.27}{References}{}% 9
+\BOOKMARK [1][-]{section.1}{Point Kinetics and Reactor Dynamics}{}% 1
+\BOOKMARK [2][-]{subsection.2}{The Motivation for a Simpler Model}{section.1}% 2
+\BOOKMARK [2][-]{subsection.4}{The Point Reactor}{section.1}% 3
+\BOOKMARK [2][-]{subsection.14}{Important Concepts for this Analysis}{section.1}% 4
+\BOOKMARK [2][-]{subsection.18}{Analytical Jacobian Analysis}{section.1}% 5
+\BOOKMARK [2][-]{subsection.21}{The Analytical Solution to the Step Insertion}{section.1}% 6
+\BOOKMARK [1][-]{appendix.22}{Appendix A. An example appendix}{}% 7
+\BOOKMARK [1][-]{theorem.23}{Acknowledgments}{}% 8
+\BOOKMARK [1][-]{theorem.23}{References}{}% 9

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2019.11.25)  27 NOV 2019 00:14
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2019.11.25)  11 DEC 2019 11:41
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -482,99 +482,107 @@ ath-e-mat-ics and Physics
  []
 
 
-LaTeX Warning: Reference `sec:proof' on page 1 undefined on input line 104.
+Underfull \hbox (badness 10000) in paragraph at lines 93--97
 
-Package hyperref Info: bookmark level for unknown theorem defaults to 0 on inpu
-t line 106.
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 98--102
+
+ []
+
 [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
-Package hyperref Info: bookmark level for unknown corollary defaults to 0 on in
-put line 134.
-Package hyperref Info: bookmark level for unknown proof defaults to 0 on input 
-line 139.
- [2]
-Package hyperref Info: bookmark level for unknown algorithm defaults to 0 on in
-put line 179.
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 182.
+Underfull \hbox (badness 10000) in paragraph at lines 130--135
+
+ []
 
 
-(/usr/share/texlive/texmf-dist/tex/latex/base/omscmr.fd
-File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
-)
-LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 182.
+Underfull \hbox (badness 10000) in paragraph at lines 136--140
+
+ []
+
+Package hyperref Info: bookmark level for unknown definition defaults to 0 on i
+nput line 176.
+[2]
+Overfull \hbox (0.56664pt too wide) in paragraph at lines 198--202
+ \OT1/cmr/bx/n/10 1.4. An-a-lyt-i-cal Ja-co-bian Anal-y-sis.[][] \OT1/cmr/m/n/1
+0 The form of the ODE de-fined in Eqs. [][](1.3)[][]|
+ []
 
 
-LaTeX Warning: Reference `tab:foo' on page 1 undefined on input line 201.
+Overfull \hbox (4.75946pt too wide) in paragraph at lines 198--202
+\OT1/cmr/m/n/10 and [][](1.4)[][], lead to an an-a-lyt-i-cal def-i-ni-tion of t
+his sys-tem's Ja-co-bian. (CITE GANOPOL)|
+ []
 
 
-./point_kinetics.tex:205: LaTeX Error: File `lexample_fig1' not found.
+Underfull \hbox (badness 10000) in paragraph at lines 214--223
 
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.205 ...bel{fig:a}\includegraphics{lexample_fig1}
-                                                  
-I could not locate the file with any of these extensions:
-.eps,.pdf,.png,.jpg,.eps
-Try typing  <return>  to proceed.
-If that doesn't work, type  X <return>  to quit.
+ []
 
-[3]
+
+Underfull \hbox (badness 10000) in paragraph at lines 224--232
+
+ []
+
+
+LaTeX Warning: Reference `eq:analytical-step' on page 1 undefined on input line
+ 241.
+
 Package hyperref Info: bookmark level for unknown lemma defaults to 0 on input 
-line 227.
- (./point_kinetics.bbl)
+line 385.
+[3] (./point_kinetics.bbl
+
+LaTeX Warning: Empty `thebibliography' environment on input line 3.
+
+)
 \tf@thm=\write4
 \openout4 = `point_kinetics.thm'.
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 237.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 395.
  [4]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 237.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 395.
  (./point_kinetics.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 237.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 237.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 395.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 395.
 Package rerunfilecheck Info: File `point_kinetics.out' has not changed.
-(rerunfilecheck)             Checksum: 5CF4490625A843E1B709BDF5AD194F41;470.
+(rerunfilecheck)             Checksum: 2BE1F162499A10628813DCCF1011D071;633.
 
 
 LaTeX Warning: There were undefined references.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 237.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 395.
  ) 
 Here is how much of TeX's memory you used:
- 9315 strings out of 492982
- 146899 string characters out of 6134895
- 338509 words of memory out of 5000000
- 12743 multiletter control sequences out of 15000+600000
- 12973 words of font info for 49 fonts, out of 8000000 for 9000
+ 9218 strings out of 492982
+ 145932 string characters out of 6134895
+ 338515 words of memory out of 5000000
+ 12666 multiletter control sequences out of 15000+600000
+ 10415 words of font info for 40 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 36i,9n,39p,248b,504s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbsy10.pfb></u
-sr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/sha
-re/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx8.pfb></usr/share/texl
-ive/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb></usr/share/texlive/t
-exmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-d
-ist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fo
-nts/type1/public/amsfonts/cm/cmmi5.pfb></usr/share/texlive/texmf-dist/fonts/typ
-e1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/publ
-ic/amsfonts/cm/cmmib10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/am
-sfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/
-cm/cmr6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.
-pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></us
-r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/shar
-e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb></usr/share/texli
-ve/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/share/texlive/texm
-f-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/
-fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texlive/texmf-dist/fonts/
-type1/public/amsfonts/cm/cmti8.pfb></usr/share/texlive/texmf-dist/fonts/type1/p
-ublic/amsfonts/cm/cmtt10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/
-amsfonts/symbols/msbm10.pfb>
-Output written on point_kinetics.pdf (4 pages, 235647 bytes).
+ 36i,16n,39p,248b,450s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></us
+r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx8.pfb></usr/share
+/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbxti10.pfb></usr/share/tex
+live/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb></usr/share/texlive/
+texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-
+dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/f
+onts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/ty
+pe1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/pub
+lic/amsfonts/cm/cmr5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsf
+onts/cm/cmr6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/
+cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb
+></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsl10.pfb></usr
+/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share
+/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/share/texliv
+e/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf
+-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb>
+Output written on point_kinetics.pdf (4 pages, 208769 bytes).
 PDF statistics:
- 189 PDF objects out of 1000 (max. 8388607)
- 160 compressed objects within 2 object streams
- 33 named destinations out of 1000 (max. 500000)
+ 165 PDF objects out of 1000 (max. 8388607)
+ 140 compressed objects within 2 object streams
+ 28 named destinations out of 1000 (max. 500000)
  73 words of extra memory for PDF output out of 10000 (max. 10000000)
 
