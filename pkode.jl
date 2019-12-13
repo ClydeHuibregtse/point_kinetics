@@ -24,8 +24,8 @@ module point_kinetics
     (insert::TanhInsert)(t::Float64)::Float64 = (tanh((t - insert.t) * insert.k) + 1.) / 2. * insert.ρ
 
 
-    struct PKparams
-        ρ::AbstractInsert
+    struct PKparams{T}
+        ρ::T
         Λ::Float64
         β::Float64
         lams::Array{Float64, 1}
@@ -58,8 +58,8 @@ delayed_neutron_fractions = [9, 87, 70, 140, 60, 55] * 1.e-5
 precursor_tcs = [0.0124, 0.0305, 0.111, 0.301, 1.14, 3.01]
 mean_generation_time = 1.e-5
 delayed_neutron_fractions ./ sum(delayed_neutron_fractions)
-# step_reac = point_kinetics.StepInsert(1.e-3, 5.)
-step_reac = point_kinetics.TanhInsert(1.e-3, 5., 10)
+step_reac = point_kinetics.StepInsert(1.e-3, 5.)
+# step_reac = point_kinetics.TanhInsert(1.e-3, 5., 10)
 
 
 # plot(1:0.1:10.,ext_reac(1:0.1:10.))
@@ -136,12 +136,12 @@ function pk_test!(du, u, p, t)
     prec_conc = @view u[2:end]
 
     # dn = @view du[1]
-    # d_prec_conc = @view du[2:end]
+    d_prec_conc = @view du[2:end]
 
     du[1] = (ρ(t) - β)*u[1] / Λ + lams' *  prec_conc
 
 
-    # d_prec_conc .= bets .* u[1] ./ Λ .- lams .* prec_conc
+    d_prec_conc .= bets .* u[1] ./ Λ .- lams .* prec_conc
 end
 
 u = u0
@@ -150,8 +150,8 @@ du = similar(u)
 # @trace point_kinetics.pk!(du, u, p, 0.0)
 
 @btime pk_test!(du, u, p, 0.0)
-@allocated pk_test!(du, u, p, 0.0)
-@code_llvm pk_test!(du, u, p, 0.0)
+
+# @code_llvm pk_test!(du, u, p, 0.0)
 @code_warntype pk_test!(du, u, p, 0.0)
 a = 1
 
@@ -281,7 +281,8 @@ function Ψ(t)
             betas[5]/Λ     0            0           0           0     -lambdas[5]   0
             betas[6]/Λ     0            0           0           0          0    -lambdas[6]
             ]
-    eigs = eigvals(jac)
+    jac = Double64.(jac)
+    eigs = real.(eigvals(jac))
 
     α_array = zeros(size(jac))
     for k in 0:K
@@ -297,9 +298,10 @@ function Ψ(t)
 end
 
 using ForwardDiff;
+using DoubleFloats;
 (Ψ(1.0000001) - Ψ(1))
 
-ForwardDiff.derivative(Ψ, 1)
+# ForwardDiff.derivative(Ψ, 1)
 
 Ψ(0.001)
 [1.; betas ./ (Λ .* lambdas)]
@@ -307,8 +309,9 @@ jac
 α(0,0,eigs)
 B(3,0,eigs)
 eigs
-anal_sol = hcat(map(Ψ, 0:.01:10)...)
-plot(0:.01:10, anal_sol[1,:])
+anal_sol = hcat(map(Ψ, Double64(0):Double64(.01):Double64(10))...)
+# anal_sol = hcat(map(Ψ, 0:.01:10)...)
+plot(anal_sol[1,:])
 
 
 K = 6
