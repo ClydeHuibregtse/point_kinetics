@@ -43,6 +43,29 @@
 \usepackage{amsopn}
 \DeclareMathOperator{\diag}{diag}
 
+\usepackage{listings}
+\lstdefinelanguage{Julia}%
+  {morekeywords={struct,abstract,break,case,catch,const,continue,do,else,elseif,%
+      end,export,false,for,function,immutable,import,importall,if,in,%
+      macro,module,otherwise,quote,return,switch,true,try,type,typealias,%
+      using,while},%
+   sensitive=true,%
+   %alsoother={$},%
+   morecomment=[l]\#,%
+   morecomment=[n]{\#=}{=\#},%
+   morestring=[s]{"}{"},%
+   morestring=[m]{'}{'},%
+}[keywords,comments,strings]%
+
+\lstset{%
+    language         = Julia,
+    % basicstyle       = \ttfamily,
+    keywordstyle     = \bfseries\color{blue},
+    stringstyle      = \color{magenta},
+    % commentstyle     = \color{ForestGreen},
+    showstringspaces = false,
+}
+
 
 % Optional PDF information
 \ifpdf
@@ -237,12 +260,117 @@ normal operations.
 
 \subsection{The Analytical Solution to the Step Insertion}
 As previously stated, in cases where $\rho(t)$ is constant, there exists an
-analytical solution to the point kinetics ODE. This solution is reproduced in
+analytical solution to the point kinetics ODE. The  This solution is reproduced in
 Eq.~\cref{eq:analytical-step}.
 
-% \begin{equation}
-%
-% \end{equation}
+\begin{align}
+  \label{eq:analytical-step}
+  \Psi &= \Sigma_{k=0}^K \left( (-1)^k \Sigma_{j=0}^K \left( \frac{e^{\omega_jt}B_{K-k,j}}{\Pi_{i=0, i\neq j}^K (\omega_i - \omega_j)}\right) A^k\right)\Psi_0\\
+  \text{where } B_{m,n} &= \Sigma_{i_1 = 1, i_1 \neq j}^K \Sigma_{i_2 = i_1 + 1, i_2 \neq j}^K ...\Sigma_{i_m = i_{m-1} + 1, i_m \neq j}^K \omega_{i_1}\omega_{i_2}...\omega_{i_m}
+\end{align}
+(CITE SOLUTION)
+Each $\omega_i$ is an eigenvalue of the Jacobian $A$, or is a root of the inhour
+equation:
+
+\begin{equation}
+  \rho = \Lambda\omega + \omega \Sigma_{k=1}^K \frac{\beta_k}{\omega + \lambda_k}
+\end{equation}
+
+This is the solution to which we compare all of our computed timeseries to give a
+metric for accuracy in this test case.
+
+\section{Solving the Point Kinetics Equations}
+
+\subsection{Building an Optimal Derivative Defintion}
+In order to perform any sort of reasonable benchmarking for solver algorithms,
+we must ensure that our ODE definition is optimal, such that any discrepancies in
+solution time are not drowned out by overhead. There are a few things we can check
+to ensure optimality in our ODE definition: (1) memory allocations, (2) type stability,
+and (3) solver overhead. \\
+
+The point kinetics module written for this analysis is reproduced below:
+
+\begin{lstlisting}
+  module point_kinetics
+      abstract type AbstractInsert end
+      # (p::AbstractInsert)(t::Float64)::Float64
+
+
+      struct StepInsert <: AbstractInsert
+          r::Float64
+          t::Float64
+      end
+
+      (insert::StepInsert)(t::Float64)::Float64 = t > insert.t ? insert.r : 0.
+
+      struct PKparams
+          r::AbstractInsert
+          l::Float64
+          b::Float64
+          lams::Array{Float64, 1}
+          bets::Array{Float64, 1}
+      end
+
+      function pk!(du, u, p, t)
+          r = p.r
+          l = p.l
+          b =  p.b
+          lams = p.lams
+          bets = p.bets
+
+          prec_conc = @view u[2:end]
+          d_prec_conc = @view du[2:end]
+
+          du[1] = (r(t) - b)*u[1] / l + lams' *  prec_conc
+
+          d_prec_conc .= bets .* u[1] ./ l .- lams .* prec_conc
+      end
+
+      export pk!, PKparams
+  end
+\end{lstlisting}
+
+Using the \texttt{BenchmarkTools.jl} \texttt{@btime} and \texttt{@benchmark} macros,
+we can demonstrate that our inner loop (the \texttt{pk!} method) has minimal allocations.
+Particularly, we can achieve almost no (12) heap allocations per inner loop, totalling
+only $256$ bytes. \\
+
+Now we can use the type inferencing capabilities of \texttt{Julia}'s JIT compiler
+to speed up our solves. The \texttt{@code\_warntype} macro shows no potential type
+ambiguities throughout our inner loop, so we can be assured the JIT compiler is
+producing optimal type inferences. \\
+
+Finally, we can use the \texttt{Profle.jl} module to generate a Flame plot. This
+plot shows the relative time spent in each function called during the solve. Highlighted
+in Figure~\cref{fig:flame-plot} are sections of importance. In general, though,
+there is little overhead from the solver, so most of the computation time is spent
+doing the actual integration.\\
+
+Now we can effectively dive into a solver analysis with the guarantee that algorithmic
+differences in the integrators produce the variance in the total runtimes, and not
+computational inefficiencies.
+
+\subsection{Work-Precision Diagrams}
+In this section we present a detailed analysis of the efficacy of a litany of solvers
+at a variety of tolerances. The best metric for rating the performace of a solver algorithm
+is an open question. The best choice is user-specific, so for the sake of making a
+conclusion, we specify our user needs here. We set out to create a high-speed,
+reasonably accurate simulator to be used in core design work and reactor control
+optimizations. There are a few key threshold criteria that we require of our simulator:\\
+
+\begin{enumerate}
+  \item Resolve neutron densities to an accuracy within $0.1$
+  \item Have the ability to accept a reactivity insertion of arbitrary shape
+  (not necessarily of arbitrary magnitude - mentioned during the discussion of prompt
+  criticality)
+  \item Outperform an existing Python implementation.
+\end{enumerate}
+
+
+
+
+
+
 
 % % The outline is not required, but we show an example here.
 % The paper is organized as follows. Our main results are in

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2019.11.25)  11 DEC 2019 11:41
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2019.11.25)  12 DEC 2019 21:33
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -416,25 +416,50 @@ Package: algorithmic 2009/08/24 v0.1 Document Style `algorithmic'
 \c@currclaimctr=\count144
 \c@endclaimctr=\count145
 
+(/usr/share/texlive/texmf-dist/tex/latex/listings/listings.sty
+\lst@mode=\count146
+\lst@gtempboxa=\box31
+\lst@token=\toks42
+\lst@length=\count147
+\lst@currlwidth=\dimen129
+\lst@column=\count148
+\lst@pos=\count149
+\lst@lostspace=\dimen130
+\lst@width=\dimen131
+\lst@newlines=\count150
+\lst@lineno=\count151
+\lst@maxwidth=\dimen132
+
+(/usr/share/texlive/texmf-dist/tex/latex/listings/lstmisc.sty
+File: lstmisc.sty 2015/06/04 1.6 (Carsten Heinz)
+\c@lstnumber=\count152
+\lst@skipnumbers=\count153
+\lst@framebox=\box32
+)
+(/usr/share/texlive/texmf-dist/tex/latex/listings/listings.cfg
+File: listings.cfg 2015/06/04 1.6 listings configuration
+))
+Package: listings 2015/06/04 1.6 (Carsten Heinz)
+
 (./point_kinetics.aux)
 \openout1 = `point_kinetics.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 57.
-LaTeX Font Info:    ... okay on input line 57.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 57.
-LaTeX Font Info:    ... okay on input line 57.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 57.
-LaTeX Font Info:    ... okay on input line 57.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 57.
-LaTeX Font Info:    ... okay on input line 57.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 57.
-LaTeX Font Info:    ... okay on input line 57.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 57.
-LaTeX Font Info:    ... okay on input line 57.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 57.
-LaTeX Font Info:    ... okay on input line 57.
-\AtBeginShipoutBox=\box31
-Package hyperref Info: Link coloring ON on input line 57.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 80.
+LaTeX Font Info:    ... okay on input line 80.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 80.
+LaTeX Font Info:    ... okay on input line 80.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 80.
+LaTeX Font Info:    ... okay on input line 80.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 80.
+LaTeX Font Info:    ... okay on input line 80.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 80.
+LaTeX Font Info:    ... okay on input line 80.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 80.
+LaTeX Font Info:    ... okay on input line 80.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 80.
+LaTeX Font Info:    ... okay on input line 80.
+\AtBeginShipoutBox=\box33
+Package hyperref Info: Link coloring ON on input line 80.
 
 (/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2016/05/21 v2.44 Cross-referencing by name of section
@@ -442,11 +467,11 @@ Package: nameref 2016/05/21 v2.44 Cross-referencing by name of section
 (/usr/share/texlive/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
 Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
 )
-\c@section@level=\count146
+\c@section@level=\count154
 )
-LaTeX Info: Redefining \ref on input line 57.
-LaTeX Info: Redefining \pageref on input line 57.
-LaTeX Info: Redefining \nameref on input line 57.
+LaTeX Info: Redefining \ref on input line 80.
+LaTeX Info: Redefining \pageref on input line 80.
+LaTeX Info: Redefining \nameref on input line 80.
 
 (./point_kinetics.out) (./point_kinetics.out)
 \@outlinefile=\write3
@@ -455,134 +480,189 @@ LaTeX Info: Redefining \nameref on input line 57.
 
 (/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count147
-\scratchdimen=\dimen129
-\scratchbox=\box32
-\nofMPsegments=\count148
-\nofMParguments=\count149
-\everyMPshowfont=\toks42
-\MPscratchCnt=\count150
-\MPscratchDim=\dimen130
-\MPnumerator=\count151
-\makeMPintoPDFobject=\count152
-\everyMPtoPDFconversion=\toks43
+\scratchcounter=\count155
+\scratchdimen=\dimen133
+\scratchbox=\box34
+\nofMPsegments=\count156
+\nofMParguments=\count157
+\everyMPshowfont=\toks43
+\MPscratchCnt=\count158
+\MPscratchDim=\dimen134
+\MPnumerator=\count159
+\makeMPintoPDFobject=\count160
+\everyMPtoPDFconversion=\toks44
 )
-LaTeX Font Info:    Try loading font information for U+msa on input line 60.
+\c@lstlisting=\count161
+LaTeX Font Info:    Try loading font information for U+msa on input line 83.
  (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 60.
+LaTeX Font Info:    Try loading font information for U+msb on input line 83.
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-Underfull \hbox (badness 10000) in paragraph at lines 60--60
+Underfull \hbox (badness 10000) in paragraph at lines 83--83
 [][]\OT1/cmr/m/n/8 Massachusetts In-sti-tute of Tech-nol-ogy De-part-ments of M
 ath-e-mat-ics and Physics
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 93--97
+Underfull \hbox (badness 10000) in paragraph at lines 116--120
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 98--102
+Underfull \hbox (badness 10000) in paragraph at lines 121--125
 
  []
 
 [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
-Underfull \hbox (badness 10000) in paragraph at lines 130--135
+Underfull \hbox (badness 10000) in paragraph at lines 153--158
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 136--140
+Underfull \hbox (badness 10000) in paragraph at lines 159--163
 
  []
 
 Package hyperref Info: bookmark level for unknown definition defaults to 0 on i
-nput line 176.
+nput line 199.
 [2]
-Overfull \hbox (0.56664pt too wide) in paragraph at lines 198--202
+Overfull \hbox (0.56664pt too wide) in paragraph at lines 221--225
  \OT1/cmr/bx/n/10 1.4. An-a-lyt-i-cal Ja-co-bian Anal-y-sis.[][] \OT1/cmr/m/n/1
 0 The form of the ODE de-fined in Eqs. [][](1.3)[][]|
  []
 
 
-Overfull \hbox (4.75946pt too wide) in paragraph at lines 198--202
+Overfull \hbox (4.75946pt too wide) in paragraph at lines 221--225
 \OT1/cmr/m/n/10 and [][](1.4)[][], lead to an an-a-lyt-i-cal def-i-ni-tion of t
 his sys-tem's Ja-co-bian. (CITE GANOPOL)|
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 214--223
+Underfull \hbox (badness 10000) in paragraph at lines 237--246
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 224--232
+Underfull \hbox (badness 10000) in paragraph at lines 247--255
 
  []
 
 
-LaTeX Warning: Reference `eq:analytical-step' on page 1 undefined on input line
- 241.
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [3]
+Underfull \hbox (badness 10000) in paragraph at lines 285--290
+
+ []
+
+LaTeX Font Info:    Try loading font information for OML+cmr on input line 299.
+
+(/usr/share/texlive/texmf-dist/tex/latex/base/omlcmr.fd
+File: omlcmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
+)
+LaTeX Font Info:    Font shape `OML/cmr/m/n' in size <10> not available
+(Font)              Font shape `OML/cmm/m/it' tried instead on input line 299.
+
+Overfull \hbox (97.62102pt too wide) in paragraph at lines 304--306
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] |
+ []
+
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 310.
+
+(/usr/share/texlive/texmf-dist/tex/latex/base/omscmr.fd
+File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
+)
+LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 310.
+ [4]
+Overfull \hbox (7.6201pt too wide) in paragraph at lines 326--327
+[][][][][][][][][][][][][][][][][][][][][][][][][][] |
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 333--337
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 338--342
+
+ []
+
+
+LaTeX Warning: Reference `fig:flame-plot' on page 1 undefined on input line 345
+.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 343--348
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 354--360
+
+ []
 
 Package hyperref Info: bookmark level for unknown lemma defaults to 0 on input 
-line 385.
-[3] (./point_kinetics.bbl
+line 513.
+(./point_kinetics.bbl
 
 LaTeX Warning: Empty `thebibliography' environment on input line 3.
 
-)
+[5])
 \tf@thm=\write4
 \openout4 = `point_kinetics.thm'.
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 395.
- [4]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 395.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 523.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 523.
  (./point_kinetics.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 395.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 395.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 523.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 523.
 Package rerunfilecheck Info: File `point_kinetics.out' has not changed.
-(rerunfilecheck)             Checksum: 2BE1F162499A10628813DCCF1011D071;633.
+(rerunfilecheck)             Checksum: 87D1722833DAD246A9440D2D8DB88816;869.
 
 
 LaTeX Warning: There were undefined references.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 395.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 523.
  ) 
 Here is how much of TeX's memory you used:
- 9218 strings out of 492982
- 145932 string characters out of 6134895
- 338515 words of memory out of 5000000
- 12666 multiletter control sequences out of 15000+600000
- 10415 words of font info for 40 fonts, out of 8000000 for 9000
+ 10556 strings out of 492982
+ 165331 string characters out of 6134895
+ 368761 words of memory out of 5000000
+ 13937 multiletter control sequences out of 15000+600000
+ 10583 words of font info for 41 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 36i,16n,39p,248b,450s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 36i,16n,40p,248b,1700s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></us
 r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx8.pfb></usr/share
 /texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbxti10.pfb></usr/share/tex
 live/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb></usr/share/texlive/
 texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-
 dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/f
-onts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/ty
-pe1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/pub
-lic/amsfonts/cm/cmr5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsf
-onts/cm/cmr6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/
-cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb
-></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsl10.pfb></usr
-/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share
-/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/share/texliv
-e/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf
--dist/fonts/type1/public/amsfonts/cm/cmti10.pfb>
-Output written on point_kinetics.pdf (4 pages, 208769 bytes).
+onts/type1/public/amsfonts/cm/cmmi5.pfb></usr/share/texlive/texmf-dist/fonts/ty
+pe1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/pub
+lic/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/ams
+fonts/cm/cmr5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm
+/cmr6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pf
+b></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/
+share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsl10.pfb></usr/share/
+texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texliv
+e/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb></usr/share/texlive/texmf
+-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/share/texlive/texmf-dist/f
+onts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/ty
+pe1/public/amsfonts/cm/cmti10.pfb></usr/share/texlive/texmf-dist/fonts/type1/pu
+blic/amsfonts/cm/cmtt10.pfb>
+Output written on point_kinetics.pdf (5 pages, 251418 bytes).
 PDF statistics:
- 165 PDF objects out of 1000 (max. 8388607)
- 140 compressed objects within 2 object streams
- 28 named destinations out of 1000 (max. 500000)
- 73 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 250 PDF objects out of 1000 (max. 8388607)
+ 220 compressed objects within 3 object streams
+ 76 named destinations out of 1000 (max. 500000)
+ 97 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -4,6 +4,9 @@
 \BOOKMARK [2][-]{subsection.14}{Important Concepts for this Analysis}{section.1}% 4
 \BOOKMARK [2][-]{subsection.18}{Analytical Jacobian Analysis}{section.1}% 5
 \BOOKMARK [2][-]{subsection.21}{The Analytical Solution to the Step Insertion}{section.1}% 6
-\BOOKMARK [1][-]{appendix.22}{Appendix A. An example appendix}{}% 7
-\BOOKMARK [1][-]{theorem.23}{Acknowledgments}{}% 8
-\BOOKMARK [1][-]{theorem.23}{References}{}% 9
+\BOOKMARK [1][-]{section.25}{Solving the Point Kinetics Equations}{}% 7
+\BOOKMARK [2][-]{subsection.26}{Building an Optimal Derivative Defintion}{section.25}% 8
+\BOOKMARK [2][-]{subsection.65}{Work-Precision Diagrams}{section.25}% 9
+\BOOKMARK [1][-]{appendix.69}{Appendix A. An example appendix}{}% 10
+\BOOKMARK [1][-]{theorem.70}{Acknowledgments}{}% 11
+\BOOKMARK [1][-]{theorem.70}{References}{}% 12
