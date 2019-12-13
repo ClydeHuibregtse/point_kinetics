@@ -1,4 +1,4 @@
-% SIAM Article Template
+ % SIAM Article Template
 \documentclass[review,onefignum,onetabnum]{siamart171218}
 
 % Information that is shared between the article and the supplement
@@ -369,6 +369,38 @@ optimizations. There are a few key threshold criteria that we require of our sim
   \item Have the ability to accept a reactivity insertion of arbitrary shape
   \item Outperform an existing Python implementation.
 \end{enumerate}
+
+It is with these demands in mind that we can evaluate each integration algorithm.\\
+
+Note that for the following sections regarding solver performance, the computer
+with specifications described in Table~\cref{tab:computer-specs} is used.
+
+\begin{table}[htb]
+  \begin{center}
+    \begin{tabular}{c|c}
+      Intel i7-7700&4.2 GHz (4 Core)\\
+      DDR4 2400 MHz&32 Gb\\
+      GeForce GTX 1080ti&11.34 TFLOPS (Float32)\\
+    \end{tabular}
+  \end{center}
+  \caption{Computer specifications for this performance analysis.}
+  \label{tab:computer-specs}
+\end{table}
+
+\subsection{Solving a 100 pcm Step Insertion}
+
+We approach the definition of a step insertion in two ways: (1) as a branched
+function with a jump discontinuty, and (2) as a smooth hyperbolic tangent function
+of equal size. For each of these two definitions of a step insertion, we
+evaluate the solvers on five criteria:
+
+\begin{enumerate}
+  \item Total runtime
+  \item Number of accepted and rejected steps
+  \item Average and final timepoint error
+  \item Stiffness
+\end{enumerate}
+
 
 
 

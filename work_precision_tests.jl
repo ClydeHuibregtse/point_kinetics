@@ -103,17 +103,22 @@ end
 
 benchmarks = calc_all_benchmarks()
 
+length(benchmarks)
+step_benchmarks = benchmarks[1:Int(length(benchmarks)/2)]
+tanh_benchmarks = benchmarks[Int(length(benchmarks)/2)+1:end]
+
+
 serialize("benchmarks/benchmarks.dat", benchmarks)
 
 #https://benchmarks.juliadiffeq.org/html/StiffODE/VanDerPol.html
 
-# benchmarks = deserialize("benchmarks/benchmarks.dat")
+benchmarks = deserialize("benchmarks/benchmarks.dat")
 using Plots;
 
 # scatter([mean(benchmarks[i][2].times) for i in 1:length(benchmarks)], [benchmarks[i][1][3] for i in 1:length(benchmarks)], yaxis=:log)
 
 
-function group_by_alg(alg)
+function group_by_alg(benchmarks, alg)
 
         tols = Array{Float64, 1}(undef, 12)
         times = Array{Float64, 1}(undef, 12)
@@ -131,7 +136,7 @@ function group_by_alg(alg)
         tols, times
 end
 
-function group_powers_by_alg(alg)
+function group_powers_by_alg(benchmarks, alg)
         sols = Array{Array{Float64, }, 1}(undef, 12)
         idx = 1
         for (case, bm, sol) in benchmarks
@@ -158,42 +163,42 @@ function group_powers_by_alg(alg)
         # println(sols)
         hcat(sols...)
 end
-
-
+# tanh_benchmarks
+# plot(tanh_benchmarks[1][1][1].(0:.01:10.))
+# benchmarks[1:Int(length(benchmarks)/2)]
+# benchmarks[Int(length(benchmarks)/2)+1:end]
 function build_work_precision_plot(benchmarks, solvers, test_sol)
         idx = 0
 
-        wp = true
-        final_tp = true
+        wp = false
+        final_tp = false
+        high = true
+        tanh = true
 
+        # benchmarks = tanh ? benchmarks[1:Int(length(benchmarks)/2)] : benchmarks[Int(length(benchmarks)/2)+1:end] end
+
+        plot()
         for solver in solvers
-                tols, times = group_by_alg(solver)
-                powers = group_powers_by_alg(solver)
+                if solver == dopri5 continue end# || solver == Rosenbrock23 || solver == KenCarp5 || solver == KenCarp3 continue end
+                tols, times = group_by_alg(benchmarks, solver)
+                powers = group_powers_by_alg(benchmarks, solver)
                 errors = abs.(powers .- test_sol)
-                println(size(errors))
+
                 mean_errors = mean(errors, dims=1)
 
                 if wp
                         if final_tp
-                                if idx == 0
-                                        plot(errors[end,7:end], times[7:end], xaxis=:log, shape=:circle, label=solver)
-                                        # plot(errors[end,1:6], times[1:6], xaxis=:log, shape=:circle, label=solver)
+                                if high
+                                        plot!(errors[end,1:6], times[1:6], xaxis=:log, shape=:circle,label=solver)
                                 else
                                         plot!(errors[end,7:end], times[7:end], xaxis=:log, shape=:circle,label=solver)
-                                        # plot!(errors[end,1:6], times[1:6], xaxis=:log, shape=:circle,label=solver)
                                 end
-                                idx += 1
                         else
-
-                                # println(size(mean_errors[:,7end]), size(times[6:end]))
-                                if idx == 0
-                                        # plot(mean_errors[:,7:end]', times[7:end], xaxis=:log, shape=:circle, label=solver)
-                                        plot(mean_errors[:,1:6]', times[1:6], xaxis=:log, shape=:circle, label=solver)
-                                else
-                                        # plot!(mean_errors[:,7:end]', times[7:end], xaxis=:log, shape=:circle,label=solver)
+                                if high
                                         plot!(mean_errors[:,1:6]', times[1:6], xaxis=:log, shape=:circle,label=solver)
+                                else
+                                        plot!(mean_errors[:,7:end]', times[7:end], xaxis=:log, shape=:circle,label=solver)
                                 end
-                                idx += 1
                         end
                 else
                         # errors += 1e-100
@@ -208,13 +213,31 @@ function build_work_precision_plot(benchmarks, solvers, test_sol)
                         # yaxis!(:log)
                         xlabel!("Time (s)")
                         ylabel!("Error")
-                        savefig("plots/timeseries-error/$solver.png")
+                        savefig("plots/timeseries-error/$solver-tanh.png")
                 end
 
         end
-        xlabel!("Final Timepoint Error")
+        if final_tp
+                xlabel!("Final Timepoint Error")
+                prefix = "final_tp"
+        else
+                xlabel!("Mean Error")
+                prefix = ""
+        end
         ylabel!("Median Runtime (ns)")
-        savefig("plots/work-precision/final_tp_low_tolerance_100pcm.png")
+        if high
+                if tanh
+                        savefig("plots/work-precision/$prefix-high_tolerance_100pcm_tanh.png")
+                else
+                        savefig("plots/work-precision/$prefix-high_tolerance_100pcm.png")
+                end
+        else
+                if tanh
+                        savefig("plots/work-precision/$prefix-low_tolerance_100pcm_tanh.png")
+                else
+                        savefig("plots/work-precision/$prefix-low_tolerance_100pcm.png")
+                end
+        end
         current()
 end
 
@@ -224,7 +247,7 @@ end
 test_sol = reshape(hcat(point_kinetics.Ψ.(0:.01:5., 1e-3)...)[1,:], (501,1))
 test_sol = vcat(ones(500,1), test_sol)
 
-build_work_precision_plot(benchmarks, solvers[1:end], test_sol)
+build_work_precision_plot(tanh_benchmarks, solvers[1:end], test_sol)
 
 
 function build_a_sol_plot(rho)
@@ -242,3 +265,52 @@ function build_a_sol_plot(rho)
 end
 
 build_a_sol_plot(1.e-3)
+
+benchmarks[1][1][3]
+
+
+
+
+function count_steps(benchmarks)
+        step_info = Dict{String, Any}()
+        for (case, bm, sol) in benchmarks
+                if case[2] == lsoda continue end
+
+                num_accepted = sol.destats.naccept
+                num_rejected = sol.destats.nreject
+                num_total = num_accepted + num_rejected
+
+                solver, tol = case[2:3]
+
+                if !haskey(step_info, "$solver")
+                        step_info["$solver"] = Dict()
+                end
+
+                step_info["$solver"][tol] = [num_total num_accepted num_rejected]
+        end
+        return step_info
+end
+
+
+tanh_steps = count_steps(tanh_benchmarks)
+step_steps = count_steps(step_benchmarks)
+
+collect(keys(step_steps))
+# vcat(collect(values(step_steps[radau5]))...)
+step_steps["TRBDF2"]
+function plot_steps(steps)
+        plot()
+        for alg in collect(keys(steps))
+                if alg == "Rosenbrock23" continue end
+                alg_steps = sort(steps[alg])
+                tols = collect(keys(alg_steps))
+                tol_steps = vcat(collect(values(alg_steps))...)
+                plot!(tols, tol_steps[:,1], label=alg, xaxis=:log)
+        end
+        xlabel!("Absolute Tolerance")
+        ylabel!("Number of Total Solve Steps")
+        savefig("plots/step_plots/tanhinserts.png")
+        current()
+end
+
+plot_steps(tanh_steps)
