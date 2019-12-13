@@ -245,7 +245,7 @@ the reactor power grows without bound millions of times faster than when it is d
 critical. \\
 
 There are a few things to note: (1) the unbounded growth of reactor power seen
-in transients with positive $\rho(t)$ parameters is a numerical result. In reality,
+in transients with positive $\rho(t)$ parameters is a numerical phenomenon. In reality,
 nuclear material undergoes a ``fizzle" (CITE) that limits this rapid overpower (except
 in the cases of nuclear weapons). This effect is not captured in the Point Reactor
 model, but does not affect solutions around the time of reacitivity insertion. (2) For
@@ -256,7 +256,10 @@ defined by the eigenvalues of $A$. \\
 For the purposes of building a modeling tool that can aid in iterating reactor design,
 we focus our analysis on the efficacy of solver methods on the order of $100 pcm$
 reactivity insertions. These insertions correspond to moderate transients seen during
-normal operations.
+normal operations. To be exhaustive, however, we will also examine the efficacy of our
+solver algorithms under a $1$\$ insertion. While it is more an exercise in academia than
+practical engineering, an understanding of large insertions may give insight into the
+rubustness of these solution  algorithms.
 
 \subsection{The Analytical Solution to the Step Insertion}
 As previously stated, in cases where $\rho(t)$ is constant, there exists an
@@ -276,8 +279,42 @@ equation:
   \rho = \Lambda\omega + \omega \Sigma_{k=1}^K \frac{\beta_k}{\omega + \lambda_k}
 \end{equation}
 
-This is the solution to which we compare all of our computed timeseries to give a
-metric for accuracy in this test case.
+Note that the formal definition fo this analytical solution has, in the denominator
+of each summed term, a large product of eigenvalue differences. This procedure of
+multiplying a sequence of differences is reminiscent of the Lagrange basis polynomial
+definition, where our dataset is the set of eigenvalues of $A$. Consequently,
+we encounter some numerical instability when evaluating this analytical solution.
+Figure~\cref{fig:single-double-prec} shows how we avoid this floating point
+imprecision by making use of the \texttt{DoubleFloats.jl} package.\\
+
+\begin{figure}[htb]
+  \includegraphics[width=0.5\textwidth]{../plots/analytical-sols/100pcm_fp_error.png}
+  \includegraphics[width=0.5\textwidth]{../plots/analytical-sols/100pcm.png}
+  \caption{Left: The analytical solution to the Point Kinetics equations under a $100$ pcm insertion
+  as defined in Eq.~\cref{eq:analytical-step} with use of the native \texttt{Float64} precision.
+  Right: The same solution, but instead with \texttt{Double64} (a $128$ bit floating point number)
+  as the basis. The error is resolved, and the pertinent features are evident. The insertions occur
+  at $t = 5$s.}
+  \label{fig:single-double-prec}
+\end{figure}
+
+Additionally, we will examine reactivity insertions on the order of $1$\$, which
+diverge very quickly. Figure~\cref{fig:dollar-insert-analytical} shows the analytical
+solution to the point kinetics equations under a step insertion of $1$\$.
+
+\begin{figure}[htb]
+  \includegraphics[width=0.5\textwidth]{../plots/analytical-sols/100pcm.png}
+  \includegraphics[width=0.5\textwidth]{../plots/analytical-sols/421pcm.png}
+  \caption{Left: A reproduction of the right plot from Figure~\cref{fig:single-double-prec}.
+  Right: The analytical solution defined in Eq.~\cref{eq:analytical-step} with a
+  reactivity insertion of $1$\$ or $421$ pcm. Note that the prompt jump is so large that the
+  solution diverges within a thousandth of a second. These two curves represent our
+  test case solutions.}
+  \label{fig:dollar-insert-analytical}
+\end{figure}
+
+These two curves are a baseline to which we compare all of our computed solutions,
+giving a quantifiable metric for accuracy in both tranients.
 
 \section{Solving the Point Kinetics Equations}
 
@@ -288,70 +325,38 @@ solution time are not drowned out by overhead. There are a few things we can che
 to ensure optimality in our ODE definition: (1) memory allocations, (2) type stability,
 and (3) solver overhead. \\
 
-The point kinetics module written for this analysis is reproduced below:
-
-\begin{lstlisting}
-  module point_kinetics
-      abstract type AbstractInsert end
-      # (p::AbstractInsert)(t::Float64)::Float64
-
-
-      struct StepInsert <: AbstractInsert
-          r::Float64
-          t::Float64
-      end
-
-      (insert::StepInsert)(t::Float64)::Float64 = t > insert.t ? insert.r : 0.
-
-      struct PKparams
-          r::AbstractInsert
-          l::Float64
-          b::Float64
-          lams::Array{Float64, 1}
-          bets::Array{Float64, 1}
-      end
-
-      function pk!(du, u, p, t)
-          r = p.r
-          l = p.l
-          b =  p.b
-          lams = p.lams
-          bets = p.bets
-
-          prec_conc = @view u[2:end]
-          d_prec_conc = @view du[2:end]
-
-          du[1] = (r(t) - b)*u[1] / l + lams' *  prec_conc
-
-          d_prec_conc .= bets .* u[1] ./ l .- lams .* prec_conc
-      end
-
-      export pk!, PKparams
-  end
-\end{lstlisting}
-
 Using the \texttt{BenchmarkTools.jl} \texttt{@btime} and \texttt{@benchmark} macros,
 we can demonstrate that our inner loop (the \texttt{pk!} method) has minimal allocations.
-Particularly, we can achieve almost no (12) heap allocations per inner loop, totalling
-only $256$ bytes. \\
+Particularly, we can achieve almost no (2) heap allocations per inner loop (a result of
+our two \texttt{@view} macro calls), totalling only $96$ bytes. \\
 
 Now we can use the type inferencing capabilities of \texttt{Julia}'s JIT compiler
-to speed up our solves. The \texttt{@code\_warntype} macro shows no potential type
+to speed up our solves. To achieve type stability, we define an abstract type family,
+\texttt{AbstractInsert}, that handles arbitraty reactivity insertion functions.
+This allows the parameters used within the inner loop to be fully type stable.
+The \texttt{@code\_warntype} macro shows no potential type
 ambiguities throughout our inner loop, so we can be assured the JIT compiler is
 producing optimal type inferences. \\
 
-Finally, we can use the \texttt{Profle.jl} module to generate a Flame plot. This
+Finally, we can use the \texttt{Profle.jl} module to corroborate the above two
+conclusions, that, our ODE definition is in fact optimal. This
 plot shows the relative time spent in each function called during the solve. Highlighted
 in Figure~\cref{fig:flame-plot} are sections of importance. In general, though,
 there is little overhead from the solver, so most of the computation time is spent
 doing the actual integration.\\
 
+\begin{figure}[htb]
+  % \includegraphics[width=0.5\textwidth]{../plots/flame-plots/100pcm_flame_plot.png}
+  \caption{}
+  \label{fig:flame-plot}
+\end{figure}
+
 Now we can effectively dive into a solver analysis with the guarantee that algorithmic
 differences in the integrators produce the variance in the total runtimes, and not
 computational inefficiencies.
 
-\subsection{Work-Precision Diagrams}
-In this section we present a detailed analysis of the efficacy of a litany of solvers
+\subsection{Metrics for Evaluating Integrator Performance}
+In the following sections we present a detailed analysis of the efficacy of a litany of solvers
 at a variety of tolerances. The best metric for rating the performace of a solver algorithm
 is an open question. The best choice is user-specific, so for the sake of making a
 conclusion, we specify our user needs here. We set out to create a high-speed,
@@ -359,10 +364,9 @@ reasonably accurate simulator to be used in core design work and reactor control
 optimizations. There are a few key threshold criteria that we require of our simulator:\\
 
 \begin{enumerate}
-  \item Resolve neutron densities to an accuracy within $0.1$
+  \item Resolve the prompt jump to very high fidelity ($10^{-6}$ or better)
+  \item Approximate netron densities during delayed effects to an accuracy within $10^-4$
   \item Have the ability to accept a reactivity insertion of arbitrary shape
-  (not necessarily of arbitrary magnitude - mentioned during the discussion of prompt
-  criticality)
   \item Outperform an existing Python implementation.
 \end{enumerate}
 

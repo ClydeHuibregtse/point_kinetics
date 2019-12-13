@@ -4,6 +4,8 @@ using DifferentialEquations, BenchmarkTools;
 using ImageFiltering;
 using Plots;
 using CuArrays, Flux;
+include("./pkode.jl")
+using Main.point_kinetics
 
 # nxn arrays
 function heat_transfer!(dT, T, p, t)
@@ -39,6 +41,12 @@ function heat_transfer_CNN!(dT, T, p, t)
     act_dT = @view dT[2:end-1, 2:end-1, :, :]
     act_dT .= heat_transfer_NN(T)
 end
+
+
+struct PKFullParams{T}
+    ρ::T
+    t::Float64
+    NN::
 
 
 
