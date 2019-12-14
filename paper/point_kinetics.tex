@@ -85,7 +85,16 @@
 
 % REQUIRED
 \begin{abstract}
-
+An optimal \texttt{Julia} implementation of the Point Reactor Kinetics Equations
+were implemented. Then, using both a $100$ pcm and $1$\$ step insertion as test
+cases, a solver analysis was completed to measure the relative performance of native
+and non-native algorithms. It was found that, contrary to what is expected for small
+systems such as these, non-native algorithms such as LSODA, CVODE\_BDF, and RADAU5
+drastically outperformed the native \texttt{Julia} algorithms. Some native implementations,
+such as RadauIIA5 met the standard set by the algorithms listed above, but in general,
+most performed considerable worse by all metrics. The high performing algorithms (both
+native and non-native) saw an increase in solution speed when the step insertion was
+smoothed, without an unmanageable loss in accuracy for the purposes of this simulator.
 \end{abstract}
 
 % REQUIRED
@@ -93,10 +102,10 @@
   point kinetics, reactor dynamics, high performance ODE solution
 \end{keywords}
 
-% REQUIRED
-\begin{AMS}
-  68Q25, 68R10, 68U05
-\end{AMS}
+% % REQUIRED
+% \begin{AMS}
+%   68Q25, 68R10, 68U05
+% \end{AMS}
 
 \section{Point Kinetics and Reactor Dynamics}
 
@@ -286,7 +295,7 @@ Eq.~\cref{eq:analytical-step}.
   \Psi &= \Sigma_{k=0}^K \left( (-1)^k \Sigma_{j=0}^K \left( \frac{e^{\omega_jt}B_{K-k,j}}{\Pi_{i=0, i\neq j}^K (\omega_i - \omega_j)}\right) A^k\right)\Psi_0\\
   \text{where } B_{m,n} &= \Sigma_{i_1 = 1, i_1 \neq j}^K \Sigma_{i_2 = i_1 + 1, i_2 \neq j}^K ...\Sigma_{i_m = i_{m-1} + 1, i_m \neq j}^K \omega_{i_1}\omega_{i_2}...\omega_{i_m}
 \end{align}
-(CITE SOLUTION)
+\cite{Analytical}
 Each $\omega_i$ is an eigenvalue of the Jacobian $A$, or is a root of the inhour
 equation:
 
@@ -403,7 +412,7 @@ with specifications described in \cref{tab:computer-specs} is used.
 \begin{table}[htb]
   \begin{center}
     \begin{tabular}{c|c}
-      Intel i7-7700&4.2 GHz (4 Core)\\
+      Intel i7-7700&4.2 GHz (8 Core)\\
       DDR4 2400 MHz&32 Gb\\
       GeForce GTX 1080ti&11.34 TFLOPS (Float32)\\
     \end{tabular}
@@ -423,8 +432,9 @@ evaluate the solvers on three criteria: \\
 \begin{enumerate}
   \item Total runtime
   \item Number of accepted and rejected steps
-  \item Average and final timepoint error
+  \item Average and final timepoint error\\
 \end{enumerate}
+
 
 Let's begin by examining our solver algorithms under a low tolerance for the $100$
 pcm insertion. \cref{fig:low-tol-both} shows the work precision plots for
@@ -528,10 +538,24 @@ this transient is a industry classic for evaluating solver performance. This tra
 is colloquially referred to as ``prompt criticality".
 
 
+\section{Conclusions}
+The objective of this analysis was threefold: (1) develop an optimal \texttt{Julia}
+Point Kinetics simulator, (2) analyze the performance of various native and non-native
+solution algorithms on a particular reactor transient, and (3) prescribe an algorithm
+for use in reactor engineering. To these ends we can conclude the following with respect
+to the step insertion test case. In all cases, non-native solvers such as LSODA and
+CVODE\_BDF outperformed the native \texttt{Julia} implementations, which goes
+against the conventional wisdom that the native algorithms perform well on smaller
+ODEs. Additionally, when the step insertion is smoothed, we see a drastic reduction in the number of adaptive
+steps required for \emph{most} solvers (those that increase were ill fit to solve the
+branched case anyway). Finally, in the interest of qualifying these solution algorithms
+against the peak of the nuclear academic community, we completed an analysis of the $1$\$
+insertion case. The results of which showed that this implementation sacrifices much
+of its accuracy at the gain of improved runtime in these rapidly diverging transients.
 
 \section*{Acknowledgments}
-We would like to acknowledge the assistance of volunteers in putting
-together this example manuscript and supplement.
+A big thank you to Chris Rackauckas for his incredible help in shaping and debugging
+this analysis.
 
 \bibliographystyle{siamplain}
 \bibliography{references}

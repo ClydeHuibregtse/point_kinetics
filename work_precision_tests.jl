@@ -178,16 +178,16 @@ end
 function build_work_precision_plot(benchmarks, solvers, test_sol)
         idx = 0
 
-        wp = false
+        wp = true
         final_tp = true
         high = true
-        tanh = false
+        tanh = true
 
         # benchmarks = tanh ? benchmarks[1:Int(length(benchmarks)/2)] : benchmarks[Int(length(benchmarks)/2)+1:end] end
 
         plot()
         for solver in solvers
-                if solver == rodas  ||  solver == KenCarp5 || solver == KenCarp3 continue end
+                if solver == rodas  ||  solver == KenCarp5 || solver == KenCarp3 || solver== dopri5 continue end
                 tols, times = group_by_alg(benchmarks, solver)
                 powers = group_powers_by_alg(benchmarks, solver)
                 errors = abs.(powers .- test_sol)
@@ -221,7 +221,7 @@ function build_work_precision_plot(benchmarks, solvers, test_sol)
                         # yaxis!(:log)
                         xlabel!("Time (s)")
                         ylabel!("Error")
-                        savefig("plots/timeseries-error/$solver_421.png")
+                        savefig("plots/timeseries-error/$solver-421-tanh.png")
                 end
 
         end
@@ -255,8 +255,9 @@ end
 test_sol = reshape(hcat(point_kinetics.Ψ.(0:.002:1., 4.21e-3)...)[1,:], (501,1))
 test_sol = vcat(ones(500,1), test_sol)
 plot(test_sol)
-build_work_precision_plot(dollar_benchmarks[1:120], solvers[1:end], test_sol)
-
+# build_work_precision_plot(dollar_benchmarks[1:108], solvers[1:end], test_sol)
+build_work_precision_plot(dollar_benchmarks[109:end], solvers[1:end], test_sol)
+dollar_benchmarks[1:108]
 
 function build_a_sol_plot(rho)
         tspan = [t for t in 0:.01:5]

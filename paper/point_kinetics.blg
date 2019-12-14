@@ -3,44 +3,44 @@ Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
 The top-level auxiliary file: point_kinetics.aux
 The style file: siamplain.bst
 Database file #1: references.bib
-You've used 4 entries,
+You've used 5 entries,
             2244 wiz_defined-function locations,
-            570 strings with 4537 characters,
-and the built_in function-call counts, 1358 in all, are:
-= -- 113
-> -- 49
+            578 strings with 4681 characters,
+and the built_in function-call counts, 1781 in all, are:
+= -- 157
+> -- 56
 < -- 0
-+ -- 22
-- -- 16
-* -- 93
-:= -- 200
-add.period$ -- 4
-call.type$ -- 4
-change.case$ -- 18
++ -- 25
+- -- 18
+* -- 120
+:= -- 253
+add.period$ -- 5
+call.type$ -- 5
+change.case$ -- 22
 chr.to.int$ -- 0
-cite$ -- 4
-duplicate$ -- 78
-empty$ -- 133
-format.name$ -- 16
-if$ -- 295
+cite$ -- 5
+duplicate$ -- 103
+empty$ -- 173
+format.name$ -- 18
+if$ -- 394
 int.to.chr$ -- 0
-int.to.str$ -- 4
-missing$ -- 6
-newline$ -- 15
-num.names$ -- 8
-pop$ -- 38
+int.to.str$ -- 5
+missing$ -- 7
+newline$ -- 18
+num.names$ -- 10
+pop$ -- 44
 preamble$ -- 1
-purify$ -- 16
+purify$ -- 19
 quote$ -- 0
-skip$ -- 48
+skip$ -- 70
 stack$ -- 0
-substring$ -- 86
-swap$ -- 24
+substring$ -- 131
+swap$ -- 36
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 12
+type$ -- 16
 warning$ -- 0
-while$ -- 14
-width$ -- 5
-write$ -- 36
+while$ -- 19
+width$ -- 6
+write$ -- 45
