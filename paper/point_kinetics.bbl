@@ -1,3 +1,20 @@
-\begin{thebibliography}{}
+\begin{thebibliography}{1}
+
+\bibitem{Ganopol_accurate}
+{\sc B.~Ganopol}, {\em A highly accurate algorithm for the solution of the
+  point kinetics equations}, Annals of Nuclear Energy, 62 (2013), pp.~564--571.
+
+\bibitem{Dynamics}
+{\sc D.~Hetrick}, {\em Dynamics of Nuclear Reactors}, The University of Chicago
+  Press, 1971.
+
+\bibitem{Keepin}
+{\sc G.~Keepin}, {\em Physics of Nuclear Kinetics}, Addison-Wesley, New York,
+  1965.
+
+\bibitem{Serpent}
+{\sc J.~Leppanen, M.~Pusa, T.~Viitanen, V.~Valtavirta, and T.~Kaltiaisenaho},
+  {\em The serpent monte carlo code: Status, development and applications in
+  2013}, Annals of Nuclear Energy, 82 (2015), pp.~142--150.
 
 \end{thebibliography}

@@ -38,40 +38,42 @@
 
 % Authors: full names plus addresses.
 \author{Clyde Huibregtse\thanks{Massachusetts Institute of Technology Departments of Mathematics and Physics
-  (\email{huibregc@mit.edu}, \url{www.google.com}).}}
+  (\email{huibregc@mit.edu}, \url{https://github.com/ClydeHuibregtse/point_kinetics}).}}
 
 \usepackage{amsopn}
 \DeclareMathOperator{\diag}{diag}
+\usepackage[version=4]{mhchem}
+\usepackage{tabularx}
 
-\usepackage{listings}
-\lstdefinelanguage{Julia}%
-  {morekeywords={struct,abstract,break,case,catch,const,continue,do,else,elseif,%
-      end,export,false,for,function,immutable,import,importall,if,in,%
-      macro,module,otherwise,quote,return,switch,true,try,type,typealias,%
-      using,while},%
-   sensitive=true,%
-   %alsoother={$},%
-   morecomment=[l]\#,%
-   morecomment=[n]{\#=}{=\#},%
-   morestring=[s]{"}{"},%
-   morestring=[m]{'}{'},%
-}[keywords,comments,strings]%
-
-\lstset{%
-    language         = Julia,
-    % basicstyle       = \ttfamily,
-    keywordstyle     = \bfseries\color{blue},
-    stringstyle      = \color{magenta},
-    % commentstyle     = \color{ForestGreen},
-    showstringspaces = false,
-}
+% \usepackage{listings}
+% \lstdefinelanguage{Julia}%
+%   {morekeywords={struct,abstract,break,case,catch,const,continue,do,else,elseif,%
+%       end,export,false,for,function,immutable,import,importall,if,in,%
+%       macro,module,otherwise,quote,return,switch,true,try,type,typealias,%
+%       using,while},%
+%    sensitive=true,%
+%    %alsoother={$},%
+%    morecomment=[l]\#,%
+%    morecomment=[n]{\#=}{=\#},%
+%    morestring=[s]{"}{"},%
+%    morestring=[m]{'}{'},%
+% }[keywords,comments,strings]%
+%
+% \lstset{%
+%     language         = Julia,
+%     % basicstyle       = \ttfamily,
+%     keywordstyle     = \bfseries\color{blue},
+%     stringstyle      = \color{magenta},
+%     % commentstyle     = \color{ForestGreen},
+%     showstringspaces = false,
+% }
 
 
 % Optional PDF information
 \ifpdf
 \hypersetup{
-  pdftitle={An Example Article},
-  pdfauthor={D. Doe, P. T. Frank, and J. E. Smith}
+  pdftitle={Point Kinetics},
+  pdfauthor={C. Huibregtse}
 }
 \fi
 
@@ -83,17 +85,12 @@
 
 % REQUIRED
 \begin{abstract}
-  This is an example SIAM \LaTeX\ article. This can be used as a
-  template for new articles.  Abstracts must be able to stand alone
-  and so cannot contain citations to the paper's references,
-  equations, etc.  An abstract must consist of a single paragraph and
-  be concise. Because of online formatting, abstracts must appear as
-  plain as possible. Any equations should be inline.
+
 \end{abstract}
 
 % REQUIRED
 \begin{keywords}
-  example, \LaTeX
+  point kinetics, reactor dynamics, high performance ODE solution
 \end{keywords}
 
 % REQUIRED
@@ -116,7 +113,7 @@ of these neutrons in Eq.~\cref{eq:neutron-diffusion}.
 where $N(\vec{r}, t)$ and $S(\vec{r}, t)$ are the neutron density and produced
 additional neutron density in some volume $dV$ at location
 $\vec{r}$ at time $t$.  $D$ is the diffusion constant; $v$ is the neutron
-speed; and $\Sigma_a$ is the macroscopic neutron absorption cross-section. (CITE) \\
+speed; and $\Sigma_a$ is the macroscopic neutron absorption cross-section.\cite{Dynamics} \\
 
 Note that this partial differential equation effectively encodes the
 conservation of neutrons throughout the core. Neutrons in a given volume of
@@ -124,7 +121,7 @@ fuel can: (1) move to an adjacent volume, (2) be absorbed in the given
 volume, or (3) be generated as a result of a fission within the volume.\\
 
 This branching structure lends itself wonderfully to the use of
-Monte Carlo codes to simulate neutron transport in very high fidelity (CITE SERPENT).
+Monte Carlo codes to simulate neutron transport in very high fidelity \cite{Serpent}.
 Unfortunately, modeling macroscopic reactor behavior with these high fidelity
 tools is infeasible. Coupling the thermalhydraulic behavior of the plant's
 power conversion system to the dynamics of subatomic neutrons is
@@ -147,14 +144,14 @@ generation.
 
 \begin{equation}
   S(\vec{r}, t) = \underbrace{(1-\beta)k_{\infty}\Sigma_avN}_{\text{prompt generation}} + \underbrace{\Sigma_i\lambda_iC_i}_{\text{delay generation}}
-  \label{eq:prompt-delay}
+  \label{eq:prompt-delay}\cite{Dynamics}
 \end{equation}
 
 The proportionality constants shown in Eq.~\cref{eq:prompt-delay} are outside
 the scope of this analysis. However, $C_i$ refers to the current concentration
 of ``delayed neutron group" $i$. It has been shown that the inclusion of six
 delayed neutron groups constitutes a reasonably accurate approximation of reactor
-dynamics. (CITE FOR NEUTRON GROUPS - Keepin 1965) \\
+dynamics.\cite{Keepin} \\
 
 The final, and most critical assumption the Point Reactor model makes can be
 defined as follows: (1) the densities of prompt and delay neutrons are separable
@@ -190,7 +187,25 @@ following analysis. Parameters are defined in Eqs.~\Crefrange{eq:param_1}{eq:par
 \end{align}
 
 This ordinary differential equation (ODE) consistutes the primary focus of this
-analysis.
+analysis. \cite{Dynamics}
+For the purposes of this anaylsis, we focus our data collection on a \ce{^235U}
+fast reactor. The parameters of which are shown in \cref{tab:reactor_params}.
+\begin{table}
+  \begin{center}
+    \begin{tabular}{c|c|c}
+      $\beta_i$&$\lambda_i$&$\Lambda$\\
+      \hline
+      $0.00009$&$0.0124$&$0.00001$\\
+      $0.00087$&$0.0305$&\\
+      $0.00070$&$0.111$&\\
+      $0.00140$&$0.305$&\\
+      $0.00060$&$1.14$&\\
+      $0.00055$&$3.01$&\\
+    \end{tabular}
+    \caption{Parameters for uranium fast reactor used in this analysis}
+    \label{tab:reactor_params}
+  \end{center}
+\end{table}
 
 \subsection{Important Concepts for this Analysis}
 In order to fully understand the process by which we examine this dynamical system,
@@ -198,7 +213,7 @@ one must be acquainted with the following terms that are used to describe partic
 features of a reactor transient.
 \begin{definition}{\textbf{External Reactivity:}}
   External reactivity is defined as an artificial addition (or subtraction) of
-  some fraction of the total reactor neutron population. We call any external reacitivity,
+  some fraction of the total reactor neutron population. We call any external reactivity,
   an ``insertion", whether or not it has positive or negative value. It is measured in pcm,
   or per cent mille (0.001\%)
 \end{definition}
@@ -219,7 +234,7 @@ features of a reactor transient.
 
 \subsection{Analytical Jacobian Analysis}
 The form of the ODE defined in Eqs.~\cref{eq:reac-power,eq:delayed-groups},
-lead to an analytical definition of this system's Jacobian. (CITE GANOPOL)
+lead to an analytical definition of this system's Jacobian.\cite{Ganopol_accurate}
 Particularly, our system is as defined in Eq.~\cref{eq:dynamical-system}, so
 there exists a true form of the Jacobian, shown in Eq.~\cref{eq:jacobian-definition}.
 
@@ -248,7 +263,7 @@ There are a few things to note: (1) the unbounded growth of reactor power seen
 in transients with positive $\rho(t)$ parameters is a numerical phenomenon. In reality,
 nuclear material undergoes a ``fizzle" (CITE) that limits this rapid overpower (except
 in the cases of nuclear weapons). This effect is not captured in the Point Reactor
-model, but does not affect solutions around the time of reacitivity insertion. (2) For
+model, but does not affect solutions around the time of reactivity insertion. (2) For
 sections of a reactor transient timeseries over which $\rho(t)$ is constant, there is an
 analytical solution to the dynamical system involving a series of exponential functions
 defined by the eigenvalues of $A$. \\
@@ -284,7 +299,7 @@ of each summed term, a large product of eigenvalue differences. This procedure o
 multiplying a sequence of differences is reminiscent of the Lagrange basis polynomial
 definition, where our dataset is the set of eigenvalues of $A$. Consequently,
 we encounter some numerical instability when evaluating this analytical solution.
-Figure~\cref{fig:single-double-prec} shows how we avoid this floating point
+\cref{fig:single-double-prec} shows how we avoid this floating point
 imprecision by making use of the \texttt{DoubleFloats.jl} package.\\
 
 \begin{figure}[htb]
@@ -299,13 +314,13 @@ imprecision by making use of the \texttt{DoubleFloats.jl} package.\\
 \end{figure}
 
 Additionally, we will examine reactivity insertions on the order of $1$\$, which
-diverge very quickly. Figure~\cref{fig:dollar-insert-analytical} shows the analytical
+diverge very quickly. \cref{fig:dollar-insert-analytical} shows the analytical
 solution to the point kinetics equations under a step insertion of $1$\$.
 
 \begin{figure}[htb]
   \includegraphics[width=0.5\textwidth]{../plots/analytical-sols/100pcm.png}
   \includegraphics[width=0.5\textwidth]{../plots/analytical-sols/421pcm.png}
-  \caption{Left: A reproduction of the right plot from Figure~\cref{fig:single-double-prec}.
+  \caption{Left: A reproduction of the right plot from \cref{fig:single-double-prec}.
   Right: The analytical solution defined in Eq.~\cref{eq:analytical-step} with a
   reactivity insertion of $1$\$ or $421$ pcm. Note that the prompt jump is so large that the
   solution diverges within a thousandth of a second. These two curves represent our
@@ -322,8 +337,7 @@ giving a quantifiable metric for accuracy in both tranients.
 In order to perform any sort of reasonable benchmarking for solver algorithms,
 we must ensure that our ODE definition is optimal, such that any discrepancies in
 solution time are not drowned out by overhead. There are a few things we can check
-to ensure optimality in our ODE definition: (1) memory allocations, (2) type stability,
-and (3) solver overhead. \\
+to ensure optimality in our ODE definition: (1) memory allocations, and (2) type stability. \\
 
 Using the \texttt{BenchmarkTools.jl} \texttt{@btime} and \texttt{@benchmark} macros,
 we can demonstrate that our inner loop (the \texttt{pk!} method) has minimal allocations.
@@ -338,22 +352,32 @@ The \texttt{@code\_warntype} macro shows no potential type
 ambiguities throughout our inner loop, so we can be assured the JIT compiler is
 producing optimal type inferences. \\
 
-Finally, we can use the \texttt{Profle.jl} module to corroborate the above two
-conclusions, that, our ODE definition is in fact optimal. This
-plot shows the relative time spent in each function called during the solve. Highlighted
-in Figure~\cref{fig:flame-plot} are sections of importance. In general, though,
-there is little overhead from the solver, so most of the computation time is spent
-doing the actual integration.\\
-
-\begin{figure}[htb]
-  % \includegraphics[width=0.5\textwidth]{../plots/flame-plots/100pcm_flame_plot.png}
-  \caption{}
-  \label{fig:flame-plot}
-\end{figure}
+% Finally, we can use the \texttt{Profle.jl} module to corroborate the above two
+% conclusions, that, our ODE definition is in fact optimal. This
+% plot shows the relative time spent in each function called during the solve. Highlighted
+% in \cref{fig:flame-plot} are sections of importance. In general, though,
+% there is little overhead from the solver, so most of the computation time is spent
+% doing the actual integration.\\
+%
+% \begin{figure}[htb]
+%   % \includegraphics[width=0.5\textwidth]{../plots/flame-plots/100pcm_flame_plot.png}
+%   \caption{}
+%   \label{fig:flame-plot}
+% \end{figure}
 
 Now we can effectively dive into a solver analysis with the guarantee that algorithmic
 differences in the integrators produce the variance in the total runtimes, and not
-computational inefficiencies.
+computational inefficiencies. Note that in the following sections, we define a
+``branching" insertion as a step function with a jump discontinuity, while a
+``smoothed" insertion is a hyperbolic tangent function of equal magnitude. Both
+options are shown in \cref{fig:branch-smooth}
+
+\begin{figure}[htb]
+  \includegraphics[width=0.5\textwidth]{../plots/insertion-plots/branch.png}
+  \includegraphics[width=0.5\textwidth]{../plots/insertion-plots/smooth.png}
+  \caption{Left: a branched insertion of $100$ pcm. Right: a smoothed insertion of $100$ pcm.}
+  \label{fig:branch-smooth}
+\end{figure}
 
 \subsection{Metrics for Evaluating Integrator Performance}
 In the following sections we present a detailed analysis of the efficacy of a litany of solvers
@@ -364,16 +388,17 @@ reasonably accurate simulator to be used in core design work and reactor control
 optimizations. There are a few key threshold criteria that we require of our simulator:\\
 
 \begin{enumerate}
-  \item Resolve the prompt jump to very high fidelity ($10^{-6}$ or better)
-  \item Approximate netron densities during delayed effects to an accuracy within $10^-4$
+  \item Resolve the prompt jump to high fidelity %($10^{-6}$ or better)
+  \item Approximate netron densities during delayed effects to a decent accuracy, but less
+  so than than the prompt jump %within $10^{-4}$
   \item Have the ability to accept a reactivity insertion of arbitrary shape
-  \item Outperform an existing Python implementation.
+  % \item Outperform an existing Python implementation.
 \end{enumerate}
 
 It is with these demands in mind that we can evaluate each integration algorithm.\\
 
 Note that for the following sections regarding solver performance, the computer
-with specifications described in Table~\cref{tab:computer-specs} is used.
+with specifications described in \cref{tab:computer-specs} is used.
 
 \begin{table}[htb]
   \begin{center}
@@ -392,162 +417,116 @@ with specifications described in Table~\cref{tab:computer-specs} is used.
 We approach the definition of a step insertion in two ways: (1) as a branched
 function with a jump discontinuty, and (2) as a smooth hyperbolic tangent function
 of equal size. For each of these two definitions of a step insertion, we
-evaluate the solvers on five criteria:
+evaluate the solvers on three criteria: \\
+
 
 \begin{enumerate}
   \item Total runtime
   \item Number of accepted and rejected steps
   \item Average and final timepoint error
-  \item Stiffness
 \end{enumerate}
 
+Let's begin by examining our solver algorithms under a low tolerance for the $100$
+pcm insertion. \cref{fig:low-tol-both} shows the work precision plots for
+both the branching and smoothed insertions.
 
+\begin{figure}[htb]
+  \includegraphics[width=0.5\textwidth]{../plots/work-precision/-low_tolerance_100pcm.png}
+  \includegraphics[width=0.5\textwidth]{../plots/work-precision/-low_tolerance_100pcm_tanh.png}
+  \includegraphics[width=0.5\textwidth]{../plots/work-precision/final_tp-low_tolerance_100pcm.png}
+  \includegraphics[width=0.5\textwidth]{../plots/work-precision/final_tp-low_tolerance_100pcm_tanh.png}
+  \caption{Left: mean timeseries error and final timepoint error for a branching step insertion. Right: mean timseries error and final timepoint error for the hyperbolic tangent smoothed insertion. }
+  \label{fig:low-tol-both}
+\end{figure}
 
+With low tolerances ($10^{-12} \rightarrow 10^{-7}$), we have a relatively clear
+delineation of solver performance. The top two performing algorithms are LSODA and
+CVODE\_BDF, both in terms of accuracy and runtime. The native \texttt{Julia} RadauIIA5
+performs quite similarly to its counterpart RADAU5, which implies that the integration
+is relatively agnostic to language implementation. The KenCarp methods are consistently
+the worst performing of the set, and Rosenbrock23, while slightly slower, achieves higher
+accuracy than its remaining \texttt{Julia} counterparts.\\
 
+We see that the smoothed solutions are effectively
+the same for all solvers in terms of accuracy. There are some notable exceptions:
+both KenCarp methods produce higher variance in their solution accuracy. Rosenbrock23
+handles the smoothed insertion much more poorly at high tolerances than do the remaining
+algorithms. \\
 
+Note that in both of these cases, DOPRI5 was analyzed as a potential ``worst-case"
+Runge-Kutta method, and in fact, it performed so poorly, it has been omitted from these
+plots. Now we can look into the performance of these solution algorithms in cases where
+accuracy is of less importance. These results are compiled in \cref{fig:high-tol-both}.\\
 
+\begin{figure}[htb]
+  \includegraphics[width=0.5\textwidth]{../plots/work-precision/-high_tolerance_100pcm.png}
+  \includegraphics[width=0.5\textwidth]{../plots/work-precision/-high_tolerance_100pcm_tanh.png}
+  \includegraphics[width=0.5\textwidth]{../plots/work-precision/final_tp-high_tolerance_100pcm.png}
+  \includegraphics[width=0.5\textwidth]{../plots/work-precision/final_tp-high_tolerance_100pcm_tanh.png}
+  \caption{Left: mean timeseries error and final timepoint error for a branching step insertion. Right: mean timseries error and final timepoint error for the hyperbolic tangent smoothed insertion. }
+  \label{fig:high-tol-both}
+\end{figure}
 
+For higher tolerances ($10^{-6} \rightarrow 10^{-1}$), for our branched insertion,
+we see similar trends to the
+low tolerance cases, though with some variation in accuracy. Again, from a holistic
+viewpoint, both LSODA and CVODE\_BDF seem to outperform all other solvers, particularly with
+respect to their runtimes. However, RADAU5 and RadauIIA5 make a strong case for accuracy at higher
+tolerances at the expence of a few 10ths of a millisecond per run. Once again, the KenCarp methods
+and TRBDF2 perform quite poorly. The same can be said about the results from the smoothed
+case, however with an overall reduction in average runtime across all solvers. \\
 
-% % The outline is not required, but we show an example here.
-% The paper is organized as follows. Our main results are in
-% \cref{sec:main}, our new algorithm is in \cref{sec:alg}, experimental
-% results are in \cref{sec:experiments}, and the conclusions follow in
-% \cref{sec:conclusions}.
-%
-% \section{Main results}
-% \label{sec:main}
-%
-% We interleave text filler with some example theorems and theorem-like
-% items.
-%
-% \lipsum[4]
-%
-% Here we state our main result as \cref{thm:bigthm}; the proof is
-% deferred to \cref{sec:proof}.
-%
-% \begin{theorem}[$LDL^T$ Factorization \cite{GoVa13}]\label{thm:bigthm}
-%   If $A \in \mathbb{R}^{n \times n}$ is symmetric and the principal
-%   submatrix $A(1:k,1:k)$ is nonsingular for $k=1:n-1$, then there
-%   exists a unit lower triangular matrix $L$ and a diagonal matrix
-%   \begin{displaymath}
-%     D = \diag(d_1,\dots,d_n)
-%   \end{displaymath}
-%   such that $A=LDL^T$. The factorization is unique.
-% \end{theorem}
-%
-% \lipsum[6]
-%
-% \begin{theorem}[Mean Value Theorem]\label{thm:mvt}
-%   Suppose $f$ is a function that is continuous on the closed interval
-%   $[a,b]$.  and differentiable on the open interval $(a,b)$.
-%   Then there exists a number $c$ such that $a < c < b$ and
-%   \begin{displaymath}
-%     f'(c) = \frac{f(b)-f(a)}{b-a}.
-%   \end{displaymath}
-%   In other words,
-%   \begin{displaymath}
-%     f(b)-f(a) = f'(c)(b-a).
-%   \end{displaymath}
-% \end{theorem}
-%
-% Observe that \cref{thm:bigthm,thm:mvt,cor:a} correctly mix references
-% to multiple labels.
-%
-% \begin{corollary}\label{cor:a}
-%   Let $f(x)$ be continuous and differentiable everywhere. If $f(x)$
-%   has at least two roots, then $f'(x)$ must have at least one root.
-% \end{corollary}
-% \begin{proof}
-%   Let $a$ and $b$ be two distinct roots of $f$.
-%   By \cref{thm:mvt}, there exists a number $c$ such that
-%   \begin{displaymath}
-%     f'(c) = \frac{f(b)-f(a)}{b-a} = \frac{0-0}{b-a} = 0.
-%   \end{displaymath}
-% \end{proof}
-%
-% Note that it may require two \LaTeX\ compilations for the proof marks
-% to show.
-%
-% Display matrices can be rendered using environments from \texttt{amsmath}:
-% \begin{equation}\label{eq:matrices}
-% S=\begin{bmatrix}1&0\\0&0\end{bmatrix}
-% \quad\text{and}\quad
-% C=\begin{pmatrix}1&1&0\\1&1&0\\0&0&0\end{pmatrix}.
-% \end{equation}
-% Equation \cref{eq:matrices} shows some example matrices.
-%
-% We calculate the Fr\'{e}chet derivative of $F$ as follows:
-% \begin{subequations}
-% \begin{align}
-%   F'(U,V)(H,K)
-%   &= \langle R(U,V),H\Sigma V^{T} + U\Sigma K^{T} -
-%   P(H\Sigma V^{T} + U\Sigma K^{T})\rangle \label{eq:aa} \\
-%   &= \langle R(U,V),H\Sigma V^{T} + U\Sigma K^{T}\rangle
-%   \nonumber \\
-%   &= \langle R(U,V)V\Sigma^{T},H\rangle +
-%   \langle \Sigma^{T}U^{T}R(U,V),K^{T}\rangle. \label{eq:bb}
-% \end{align}
-% \end{subequations}
-% % \Cref{eq:aa} is the first line, and \cref{eq:bb} is the last line.
-%
-% \section{Algorithm}
-% \label{sec:alg}
-%
-% \lipsum[40]
-%
-% Our analysis leads to the algorithm in \cref{alg:buildtree}.
-%
-% \begin{algorithm}
-% \caption{Build tree}
-% \label{alg:buildtree}
-% \begin{algorithmic}
-% \STATE{Define $P:=T:=\{ \{1\},\ldots,\{d\}$\}}
-% \WHILE{$\#P > 1$}
-% \STATE{Choose $C^\prime\in\mathcal{C}_p(P)$ with $C^\prime := \operatorname{argmin}_{C\in\mathcal{C}_p(P)} \varrho(C)$}
-% \STATE{Find an optimal partition tree $T_{C^\prime}$ }
-% \STATE{Update $P := (P{\setminus} C^\prime) \cup \{ \bigcup_{t\in C^\prime} t \}$}
-% \STATE{Update $T := T \cup \{ \bigcup_{t\in\tau} t : \tau\in T_{C^\prime}{\setminus} \mathcal{L}(T_{C^\prime})\}$}
-% \ENDWHILE
-% \RETURN $T$
-% \end{algorithmic}
-% \end{algorithm}
-%
-% \lipsum[41]
-%
-% \section{Experimental results}
-% \label{sec:experiments}
-%
-% \lipsum[50]
-%
-% % \Cref{fig:testfig} shows some example results. Additional results are
-% % available in the supplement in \cref{tab:foo}.
-%
-% \begin{figure}[htbp]
-%   \centering
-%   % \label{fig:a}\includegraphics{lexample_fig1}
-%   \caption{Example figure using external image files.}
-%   \label{fig:testfig}
-% \end{figure}
-%
-% \lipsum[51]
-%
-% \section{Discussion of \texorpdfstring{{\boldmath$Z=X \cup Y$}}{Z = X union Y}}
-%
-% \lipsum[76]
-%
-% \section{Conclusions}
-% \label{sec:conclusions}
-%
-% Some conclusions here.
-%
+As a representative example, let's examine the time dependent error of one of the top
+performing algorithms, CVODE\_BDF. \cref{fig:timeseries-error} shows the effect
+that smoothing has on accuracy of a critical part of the solution.\\
 
-\appendix
-\section{An example appendix}
+\begin{figure}[htb]
+  \includegraphics[width=0.5\textwidth]{../plots/timeseries-error/CVODE_BDF.png}
+  \includegraphics[width=0.5\textwidth]{../plots/timeseries-error/CVODE_BDF-tanh.png}
+  \caption{Left: error as a function of time for CVODE\_BDF with branched insertion.
+  Right: error as a function of time for same algorithm but with smoothed insertion. Both
+  plots begin at the time of insertion.}
+  \label{fig:timeseries-error}
+\end{figure}
 
+As is shown in \cref{fig:timeseries-error}, there is a considerable difference in
+the magnitudes of the accuracy after the smoothing of the reactivity insertion.
+What is particularly troublesome is the error during the first $\sim 0.1$s of the
+insertion. Accuracy in defining the shape of the prompt jump is important. Afterwards,
+the error in the delayed neutron propagation is less critical. While this distinction
+may be enough to sway a user with a need of higher accuracy, for the purposes of
+approximating reactor dynamics for use in quick iterative engineering tasks, smoothing
+is feasible. Should we deem the reduction in accuracy due to smoothing acceptable,
+we can see how much more performant the solvers are in those cases.\\
 
-\begin{lemma}
-Test Lemma.
-\end{lemma}
+In addition to tracking total runtime, we have also recorded the number of solve
+iterations each algorithm takes. These results are compiled for all tolerances for
+each solver in \cref{fig:num-steps}. \\
+
+\begin{figure}[htb]
+  \includegraphics[width=0.5\textwidth]{../plots/step-plots/stepinsert.png}
+  \includegraphics[width=0.5\textwidth]{../plots/step-plots/tanhinserts.png}
+  \caption{Left: number of steps required to solve Point Kinetics equations with
+  branching insertion. Right: number of steps required to solve with a smoothed
+  insertion. Note that Rosenbrock23 took far too many steps in the smoothed case
+  to warrant plotting, and that LSODA does not support the counting of steps during
+  its solve.}
+  \label{fig:num-steps}
+\end{figure}
+
+Here we have some interesting results. There are a few algorithms whose number of
+steps worsens through smoothing (particularly our regular poor performers Rosenbrock23
+and DOPRI5). More importantly, though, our faster algorithms such as CVODE\_BDF and
+RADAU5/RadauIIA5 drastically decrease in the number of steps required and therefore
+the required runtime.
+
+\subsection{Solving a 421pcm Insertion}
+A $421$ pcm insertion corresponds to exactly $1$\$ for the described reactor.
+While not a transient expected for any sort of normal transient through which the
+assumptions made by the Point Reactor model would survive for more than a few microseconds,
+this transient is a industry classic for evaluating solver performance. This transient
+is colloquially referred to as ``prompt criticality".
+
 
 
 \section*{Acknowledgments}

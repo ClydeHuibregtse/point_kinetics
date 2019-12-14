@@ -13,8 +13,8 @@ using DoubleFloats;
 using ODEInterface;
 
 
-
-solvers = (Rosenbrock23, KenCarp3, KenCarp5, CVODE_BDF, lsoda, TRBDF2, rodas, radau5, dopri5, RadauIIA5)
+# solvers = (Rosenbrock23, KenCarp3, KenCarp5, CVODE_BDF, lsoda, TRBDF2, rodas, radau5, dopri5, RadauIIA5)
+solvers = (Rosenbrock23, KenCarp3, KenCarp5, CVODE_BDF, lsoda, TRBDF2, radau5, dopri5, RadauIIA5)
 # solvers = ( rodas, radau5, dopri5, RadauIIA5)
 
 function build_all_cases()
@@ -29,12 +29,14 @@ function build_all_cases()
         solver_algs = solvers
 
         ## External Reactivity Functions
-        inserted_react = 1.e-3
+        inserted_react = 4.21e-3
         reactivities = [point_kinetics.StepInsert(inserted_react, 5.), point_kinetics.TanhInsert(inserted_react, 5., 10.)]
         # reactivities = [t -> (tanh((t - 50.)*1e-4) + 1.) * inserted_react / 2.  t -> t > 50. ? inserted_react : 0.]
         # reactivities = [t -> (tanh((t - 50.)*1e-1) + 1.) * 40.e-4  , t -> t > 50. ? 8.e-3 : 0.]
 
-        cases = [(c1, c2, c3, [t for t in 0:0.01:10]) for c1 in reactivities
+        # cases = [(c1, c2, c3, [t for t in 0:0.01:10]) for c1 in reactivities
+        #                         for c2 in solver_algs for c3 in tolerances]
+        cases = [(c1, c2, c3, [t for t in 4.:0.001:5.]) for c1 in reactivities
                                 for c2 in solver_algs for c3 in tolerances]
         cases
 end
@@ -59,7 +61,8 @@ function benchmark_ODE_case(case)
         u0 = vcat([1.],u0)
 
         ## Timespan Setting
-        tspan = (0., 10.)
+        # tspan = (0., 10.)
+        tspan = (4., 5.)
 
         problem = ODEProblem(point_kinetics.pk!, u0, tspan, p)
         sol = solve(problem, alg(), abstol=atol, reltol=atol*1.e3, saveat=saveat)
@@ -102,6 +105,9 @@ end
 # plot(test[1][end], vars=(1))
 
 benchmarks = calc_all_benchmarks()
+dollar_benchmarks = calc_all_benchmarks()
+
+
 
 length(benchmarks)
 step_benchmarks = benchmarks[1:Int(length(benchmarks)/2)]
@@ -109,6 +115,7 @@ tanh_benchmarks = benchmarks[Int(length(benchmarks)/2)+1:end]
 
 
 serialize("benchmarks/benchmarks.dat", benchmarks)
+serialize("benchmarks/dollar_benchmarks.dat", dollar_benchmarks)
 
 #https://benchmarks.juliadiffeq.org/html/StiffODE/VanDerPol.html
 
@@ -140,6 +147,7 @@ function group_powers_by_alg(benchmarks, alg)
         sols = Array{Array{Float64, }, 1}(undef, 12)
         idx = 1
         for (case, bm, sol) in benchmarks
+
                 reac = case[1](100)
                 tol = case[3]
                 # println(case[2])
@@ -160,7 +168,7 @@ function group_powers_by_alg(benchmarks, alg)
                 sols[idx] = hcat(sol.u...)[1,:]
                 idx += 1
         end
-        # println(sols)
+
         hcat(sols...)
 end
 # tanh_benchmarks
@@ -171,15 +179,15 @@ function build_work_precision_plot(benchmarks, solvers, test_sol)
         idx = 0
 
         wp = false
-        final_tp = false
+        final_tp = true
         high = true
-        tanh = true
+        tanh = false
 
         # benchmarks = tanh ? benchmarks[1:Int(length(benchmarks)/2)] : benchmarks[Int(length(benchmarks)/2)+1:end] end
 
         plot()
         for solver in solvers
-                if solver == dopri5 continue end# || solver == Rosenbrock23 || solver == KenCarp5 || solver == KenCarp3 continue end
+                if solver == rodas  ||  solver == KenCarp5 || solver == KenCarp3 continue end
                 tols, times = group_by_alg(benchmarks, solver)
                 powers = group_powers_by_alg(benchmarks, solver)
                 errors = abs.(powers .- test_sol)
@@ -213,7 +221,7 @@ function build_work_precision_plot(benchmarks, solvers, test_sol)
                         # yaxis!(:log)
                         xlabel!("Time (s)")
                         ylabel!("Error")
-                        savefig("plots/timeseries-error/$solver-tanh.png")
+                        savefig("plots/timeseries-error/$solver_421.png")
                 end
 
         end
@@ -227,15 +235,15 @@ function build_work_precision_plot(benchmarks, solvers, test_sol)
         ylabel!("Median Runtime (ns)")
         if high
                 if tanh
-                        savefig("plots/work-precision/$prefix-high_tolerance_100pcm_tanh.png")
+                        savefig("plots/work-precision/$prefix-high_tolerance_421pcm_tanh.png")
                 else
-                        savefig("plots/work-precision/$prefix-high_tolerance_100pcm.png")
+                        savefig("plots/work-precision/$prefix-high_tolerance_421pcm.png")
                 end
         else
                 if tanh
-                        savefig("plots/work-precision/$prefix-low_tolerance_100pcm_tanh.png")
+                        savefig("plots/work-precision/$prefix-low_tolerance_421pcm_tanh.png")
                 else
-                        savefig("plots/work-precision/$prefix-low_tolerance_100pcm.png")
+                        savefig("plots/work-precision/$prefix-low_tolerance_421pcm.png")
                 end
         end
         current()
@@ -244,10 +252,10 @@ end
 
 
 
-test_sol = reshape(hcat(point_kinetics.Ψ.(0:.01:5., 1e-3)...)[1,:], (501,1))
+test_sol = reshape(hcat(point_kinetics.Ψ.(0:.002:1., 4.21e-3)...)[1,:], (501,1))
 test_sol = vcat(ones(500,1), test_sol)
-
-build_work_precision_plot(tanh_benchmarks, solvers[1:end], test_sol)
+plot(test_sol)
+build_work_precision_plot(dollar_benchmarks[1:120], solvers[1:end], test_sol)
 
 
 function build_a_sol_plot(rho)
@@ -305,7 +313,7 @@ function plot_steps(steps)
                 alg_steps = sort(steps[alg])
                 tols = collect(keys(alg_steps))
                 tol_steps = vcat(collect(values(alg_steps))...)
-                plot!(tols, tol_steps[:,1], label=alg, xaxis=:log)
+                plot!(tols, tol_steps[:,1], label=alg, xaxis=:log, shape=:circle)
         end
         xlabel!("Absolute Tolerance")
         ylabel!("Number of Total Solve Steps")
@@ -314,3 +322,11 @@ function plot_steps(steps)
 end
 
 plot_steps(tanh_steps)
+
+
+tspan = 0:.01:10.
+
+plot(tspan, benchmarks[1][1][1].(tspan), label="Branch Reactivity Insertion")
+xlabel!("Time (s)")
+ylabel!("External Reactivity (pcm)")
+savefig("plots/insertion-plots/branch.png")
