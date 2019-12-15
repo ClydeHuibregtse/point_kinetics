@@ -86,13 +86,13 @@
 % REQUIRED
 \begin{abstract}
 An optimal \texttt{Julia} implementation of the Point Reactor Kinetics Equations
-were implemented. Then, using both a $100$ pcm and $1$\$ step insertion as test
+was created. Then, using both a $100$ pcm and $1$\$ step insertion as test
 cases, a solver analysis was completed to measure the relative performance of native
 and non-native algorithms. It was found that, contrary to what is expected for small
 systems such as these, non-native algorithms such as LSODA, CVODE\_BDF, and RADAU5
 drastically outperformed the native \texttt{Julia} algorithms. Some native implementations,
 such as RadauIIA5 met the standard set by the algorithms listed above, but in general,
-most performed considerable worse by all metrics. The high performing algorithms (both
+most performed considerably worse by all metrics. The high performing algorithms (both
 native and non-native) saw an increase in solution speed when the step insertion was
 smoothed, without an unmanageable loss in accuracy for the purposes of this simulator.
 \end{abstract}
@@ -126,8 +126,8 @@ speed; and $\Sigma_a$ is the macroscopic neutron absorption cross-section.\cite{
 
 Note that this partial differential equation effectively encodes the
 conservation of neutrons throughout the core. Neutrons in a given volume of
-fuel can: (1) move to an adjacent volume, (2) be absorbed in the given
-volume, or (3) be generated as a result of a fission within the volume.\\
+fuel: (1) move to an adjacent volume, (2) are absorbed in the given
+volume, or (3) are generated as a result of a fission within the volume.\\
 
 This branching structure lends itself wonderfully to the use of
 Monte Carlo codes to simulate neutron transport in very high fidelity \cite{Serpent}.
@@ -135,20 +135,20 @@ Unfortunately, modeling macroscopic reactor behavior with these high fidelity
 tools is infeasible. Coupling the thermalhydraulic behavior of the plant's
 power conversion system to the dynamics of subatomic neutrons is
 computationally intractable. Consequently, we must create an abstraction from
-the neutronics to core-wide dynamics that effectively model important plant
+the neutronics to core-wide dynamics that effectively models important plant
 behavior without knowledge of individual neutrons. To do this, we use the
 Point Reactor model.
 
 \subsection{The Point Reactor}
 The point reactor model operates under a few critical assumptions. First,
-it is assumed that the netrons included in $N(\vec{r}, t)$ are all of a single
-energy (for our purposes, this is ``fast", rather than ``thermal" energies).
+the netrons included in $N(\vec{r}, t)$ are all of a single
+energy (for our purposes, this is the ``fast", rather than the ``thermal" energy spectrum).
 Additionally, our treatment of the neutron production term $S(\vec{r}, t)$
 in Eq.~\cref{eq:neutron-diffusion} must be formally defined for the point
 reactor. As shown in Eq.~\cref{eq:prompt-delay}, produced neutrons can be of
 two types: \emph{prompt} and \emph{delayed}. Prompt neutrons are produced
 through direct fission of fuel nuclei, while delayed neutrons are the
-byproduct of fission-product decay significantly later than the prompt
+results of fission-product decay significantly later than the prompt
 generation.
 
 \begin{equation}
@@ -156,8 +156,10 @@ generation.
   \label{eq:prompt-delay}\cite{Dynamics}
 \end{equation}
 
-The proportionality constants shown in Eq.~\cref{eq:prompt-delay} are outside
-the scope of this analysis. However, $C_i$ refers to the current concentration
+The proportionality constants shown in Eq.~\cref{eq:prompt-delay} help to
+establish that the the prompt and delayed neutrons are generated according to
+the fractions $1-\beta$ and $\beta$ respectively. The critical takeaway, however,
+is that $C_i$ refers to the current concentration
 of ``delayed neutron group" $i$. It has been shown that the inclusion of six
 delayed neutron groups constitutes a reasonably accurate approximation of reactor
 dynamics.\cite{Keepin} \\
@@ -226,18 +228,18 @@ features of a reactor transient.
   an ``insertion", whether or not it has positive or negative value. It is measured in pcm,
   or per cent mille (0.001\%)
 \end{definition}
-\begin{definition}{\textbf{Dollar (reactivity):}}
-  One dollar of reactivity (\$) is defined as the reactivity required to cross the
-  threshold from delayed criticality to prompt criticality. It is numerically equal
-  to the $\beta$ constant defined in Eq.~\cref{eq:param_4}.
-\end{definition}
 \begin{definition}{\textbf{Prompt Criticality:}}
   Prompt criticality refers to a reactor state in which a positive feedback nuclear
-  chain reaction is sustained \emph{entirely} by the generation of prompt neutrons.
+  chain reaction is sustained entirely by the generation of prompt neutrons.
   This differs from delayed criticality in that it does not require the presense of
   delayed neutron groups to maintain its fission chain reaction. Prompt criticality
   is characterised by fast spikes in power due to the short generation times for
   prompt neutrons.
+\end{definition}
+\begin{definition}{\textbf{Dollar (reactivity):}}
+  One dollar of reactivity (\$) is defined as the reactivity required to cross the
+  threshold from delayed criticality to prompt criticality. It is numerically equal
+  to the $\beta$ constant defined in Eq.~\cref{eq:param_4}.
 \end{definition}
 
 
@@ -270,15 +272,16 @@ critical. \\
 
 There are a few things to note: (1) the unbounded growth of reactor power seen
 in transients with positive $\rho(t)$ parameters is a numerical phenomenon. In reality,
-nuclear material undergoes a ``fizzle" (CITE) that limits this rapid overpower (except
-in the cases of nuclear weapons). This effect is not captured in the Point Reactor
-model, but does not affect solutions around the time of reactivity insertion. (2) For
-sections of a reactor transient timeseries over which $\rho(t)$ is constant, there is an
+nuclear material undergoes a ``fizzle" that limits this rapid overpower (except
+in the cases of properly constructed nuclear weapons). This effect is not captured in the Point Reactor
+model, but does not affect solutions around the time of reactivity insertion or solutions
+where insertions are reasonably small. (2) For
+sections of a reactor transient over which $\rho(t)$ is constant, there is an
 analytical solution to the dynamical system involving a series of exponential functions
 defined by the eigenvalues of $A$. \\
 
 For the purposes of building a modeling tool that can aid in iterating reactor design,
-we focus our analysis on the efficacy of solver methods on the order of $100 pcm$
+we focus our analysis on the efficacy of solver methods on the order of $100$ pcm
 reactivity insertions. These insertions correspond to moderate transients seen during
 normal operations. To be exhaustive, however, we will also examine the efficacy of our
 solver algorithms under a $1$\$ insertion. While it is more an exercise in academia than
@@ -287,15 +290,15 @@ rubustness of these solution  algorithms.
 
 \subsection{The Analytical Solution to the Step Insertion}
 As previously stated, in cases where $\rho(t)$ is constant, there exists an
-analytical solution to the point kinetics ODE. The  This solution is reproduced in
+analytical solution to the point kinetics ODE. This solution is reproduced in
 Eq.~\cref{eq:analytical-step}.
 
 \begin{align}
   \label{eq:analytical-step}
   \Psi &= \Sigma_{k=0}^K \left( (-1)^k \Sigma_{j=0}^K \left( \frac{e^{\omega_jt}B_{K-k,j}}{\Pi_{i=0, i\neq j}^K (\omega_i - \omega_j)}\right) A^k\right)\Psi_0\\
-  \text{where } B_{m,n} &= \Sigma_{i_1 = 1, i_1 \neq j}^K \Sigma_{i_2 = i_1 + 1, i_2 \neq j}^K ...\Sigma_{i_m = i_{m-1} + 1, i_m \neq j}^K \omega_{i_1}\omega_{i_2}...\omega_{i_m}
+  \text{where } B_{m,j} &= \Sigma_{i_1 = 1, i_1 \neq j}^K \Sigma_{i_2 = i_1 + 1, i_2 \neq j}^K ...\Sigma_{i_m = i_{m-1} + 1, i_m \neq j}^K \omega_{i_1}\omega_{i_2}...\omega_{i_m}
+  \cite{Analytical}
 \end{align}
-\cite{Analytical}
 Each $\omega_i$ is an eigenvalue of the Jacobian $A$, or is a root of the inhour
 equation:
 
@@ -310,7 +313,6 @@ definition, where our dataset is the set of eigenvalues of $A$. Consequently,
 we encounter some numerical instability when evaluating this analytical solution.
 \cref{fig:single-double-prec} shows how we avoid this floating point
 imprecision by making use of the \texttt{DoubleFloats.jl} package.\\
-
 \begin{figure}[htb]
   \includegraphics[width=0.5\textwidth]{../plots/analytical-sols/100pcm_fp_error.png}
   \includegraphics[width=0.5\textwidth]{../plots/analytical-sols/100pcm.png}
@@ -318,13 +320,15 @@ imprecision by making use of the \texttt{DoubleFloats.jl} package.\\
   as defined in Eq.~\cref{eq:analytical-step} with use of the native \texttt{Float64} precision.
   Right: The same solution, but instead with \texttt{Double64} (a $128$ bit floating point number)
   as the basis. The error is resolved, and the pertinent features are evident. The insertions occur
-  at $t = 5$s.}
+  at $t = 5$s. Note some important defintions for these types of transients. The steep rise
+  at $t = 5$s is refered to as the ``prompt jump", after which, the delayed neutron generation
+  catches up and we see a slower growth in reactor power.}
   \label{fig:single-double-prec}
 \end{figure}
 
 Additionally, we will examine reactivity insertions on the order of $1$\$, which
 diverge very quickly. \cref{fig:dollar-insert-analytical} shows the analytical
-solution to the point kinetics equations under a step insertion of $1$\$.
+solution to the point kinetics equations under a step insertion of $1$\$.\\
 
 \begin{figure}[htb]
   \includegraphics[width=0.5\textwidth]{../plots/analytical-sols/100pcm.png}
@@ -384,19 +388,21 @@ options are shown in \cref{fig:branch-smooth}
 \begin{figure}[htb]
   \includegraphics[width=0.5\textwidth]{../plots/insertion-plots/branch.png}
   \includegraphics[width=0.5\textwidth]{../plots/insertion-plots/smooth.png}
-  \caption{Left: a branched insertion of $100$ pcm. Right: a smoothed insertion of $100$ pcm.}
+  \caption{Left: a branched insertion of $100$ pcm. Right: a smoothed insertion of $100$ pcm. We
+  use the hyperbolic tangent function with steepness $k=10$: $\frac{\rho}{2}(\tanh{(t - 5)k} + 1)$.}
   \label{fig:branch-smooth}
 \end{figure}
 
 \subsection{Metrics for Evaluating Integrator Performance}
 In the following sections we present a detailed analysis of the efficacy of a litany of solvers
 at a variety of tolerances. The best metric for rating the performace of a solver algorithm
-is an open question. The best choice is user-specific, so for the sake of making a
+is an open question. The objectives are user-specific, so for the sake of making a
 conclusion, we specify our user needs here. We set out to create a high-speed,
 reasonably accurate simulator to be used in core design work and reactor control
 optimizations. There are a few key threshold criteria that we require of our simulator:\\
 
 \begin{enumerate}
+  \item Prioritize speed to within reasonable accuracy
   \item Resolve the prompt jump to high fidelity %($10^{-6}$ or better)
   \item Approximate netron densities during delayed effects to a decent accuracy, but less
   so than than the prompt jump %within $10^{-4}$
@@ -432,7 +438,7 @@ evaluate the solvers on three criteria: \\
 \begin{enumerate}
   \item Total runtime
   \item Number of accepted and rejected steps
-  \item Average and final timepoint error\\
+  \item Average and final timepoint error in neutron density\\
 \end{enumerate}
 
 
@@ -460,7 +466,7 @@ accuracy than its remaining \texttt{Julia} counterparts.\\
 We see that the smoothed solutions are effectively
 the same for all solvers in terms of accuracy. There are some notable exceptions:
 both KenCarp methods produce higher variance in their solution accuracy. Rosenbrock23
-handles the smoothed insertion much more poorly at high tolerances than do the remaining
+handles the smoothed insertion much more poorly at low tolerances than do the remaining
 algorithms. \\
 
 Note that in both of these cases, DOPRI5 was analyzed as a potential ``worst-case"
@@ -535,26 +541,76 @@ A $421$ pcm insertion corresponds to exactly $1$\$ for the described reactor.
 While not a transient expected for any sort of normal transient through which the
 assumptions made by the Point Reactor model would survive for more than a few microseconds,
 this transient is a industry classic for evaluating solver performance. This transient
-is colloquially referred to as ``prompt criticality".
+is benchmarked as a prompt criticality test. \\
 
+Let's begin by examining the high tolerance region again ($10^{-6} \rightarrow 10^{-1}$).
+The results are compiled in \cref{fig:high-tol-both-dollar}.
+\begin{figure}
+  \includegraphics[width=0.5\textwidth]{../plots/work-precision/-high_tolerance_421pcm.png}
+  \includegraphics[width=0.5\textwidth]{../plots/work-precision/-high_tolerance_421pcm_tanh.png}
+  \includegraphics[width=0.5\textwidth]{../plots/work-precision/final_tp-high_tolerance_421pcm.png}
+  \includegraphics[width=0.5\textwidth]{../plots/work-precision/final_tp-high_tolerance_421pcm_tanh.png}
+  \caption{Left: branched insertion of $1$\$ reactivity with high tolerances.
+  Right: smoothed insertion of $1$\$ with high tolerances}
+  \label{fig:high-tol-both-dollar}
+\end{figure}
+Here, it is clear that the looseness in our rolerance settings has allowed for
+an error that makes these solutions unusable. The final timepoint of the analytical
+solution under the dollar insertion is on the order of $10^8$, and these solutions
+(with the exception of a few more accurate performers like RADAU5 and RadauIIA5)
+have error of roughly that size. It would be ludicrous to draw conclusions about
+relative solver performance in a scenario in which no solver produced meaningful
+results. So, let's move on to the low tolerance regime. \\
+
+For lower tolerances ($10^{-12} \rightarrow 10^{-7}$), we see much different results.
+The work precision diagrams for these tolerances are compiled in \cref{fig:low-tol-both-dollar}.
+\begin{figure}
+  \includegraphics[width=0.5\textwidth]{../plots/work-precision/-low_tolerance_421pcm.png}
+  \includegraphics[width=0.5\textwidth]{../plots/work-precision/-low_tolerance_421pcm_tanh.png}
+  \includegraphics[width=0.5\textwidth]{../plots/work-precision/final_tp-low_tolerance_421pcm.png}
+  \includegraphics[width=0.5\textwidth]{../plots/work-precision/final_tp-low_tolerance_421pcm_tanh.png}
+  \caption{Left: branched insertion of $1$\$ reactivity with low tolerances.
+  Right: smoothed insertion of $1$\$ with low tolerances}
+  \label{fig:low-tol-both-dollar}
+\end{figure}
+Right away, we can exclude our smoothed insertion results. All solvers essentially performed
+the same, and with very high error, and no time improvement over the branched input.
+The volatile nature of this transient is such that smoothing introduced far too much
+error to the solution. This likely increased runtimes the smoothing enlarged the duration
+of the insertion, meaning the solvers were under small timestepping constraints for
+much longer, drowning out any of the improvements we see in the $100$ pcm case. \\
+
+For the branched input, however, we see great results out of our consistent top
+performers. LSODA, CVODE\_BDF, RADAU5, and RadauIIA5 reach errors below $10^2$,
+the best of which (RADAU5) gets to about $10^-1$ ($\sim 0.7$ final timepoint
+error to be exact). While these algorithms were not designed for high accuracy in the
+extreme cases of the Point Kinetics equations, these results do give much credence
+to their accuracy under high volatility. There are existing algorithms, such as the
+special case of Backwards Euler created by Barry Ganopol (colloquially referred to as
+the ``neutron transport cowboy" in the nuclear industry)
+that are the gold standard for highly accurate results under these
+large insertions. \cite{Ganopol_accurate} Nonetheless, for the purposes of handling
+a wide variety of transients the top algorithms described in this analysis are
+perfect for fast, iterative reactor design.
 
 \section{Conclusions}
 The objective of this analysis was threefold: (1) develop an optimal \texttt{Julia}
 Point Kinetics simulator, (2) analyze the performance of various native and non-native
 solution algorithms on a particular reactor transient, and (3) prescribe an algorithm
 for use in reactor engineering. To these ends we can conclude the following with respect
-to the step insertion test case. In all cases, non-native solvers such as LSODA and
+to the step insertion test case. In all $100$ pcm cases, non-native solvers such as LSODA and
 CVODE\_BDF outperformed the native \texttt{Julia} implementations, which goes
 against the conventional wisdom that the native algorithms perform well on smaller
 ODEs. Additionally, when the step insertion is smoothed, we see a drastic reduction in the number of adaptive
 steps required for \emph{most} solvers (those that increase were ill fit to solve the
 branched case anyway). Finally, in the interest of qualifying these solution algorithms
 against the peak of the nuclear academic community, we completed an analysis of the $1$\$
-insertion case. The results of which showed that this implementation sacrifices much
-of its accuracy at the gain of improved runtime in these rapidly diverging transients.
+insertion case. While their performance does not match that of the top-shelf methods
+used in academia for $1$\$ insertions, these algorithms showed enough accuracy under the
+most extreme cases to warrant their use in iterative reactor design models.
 
 \section*{Acknowledgments}
-A big thank you to Chris Rackauckas for his incredible help in shaping and debugging
+A big thank you to Dr. Chris Rackauckas for his incredible help in shaping and debugging
 this analysis.
 
 \bibliographystyle{siamplain}

@@ -36,7 +36,7 @@ function build_all_cases()
 
         # cases = [(c1, c2, c3, [t for t in 0:0.01:10]) for c1 in reactivities
         #                         for c2 in solver_algs for c3 in tolerances]
-        cases = [(c1, c2, c3, [t for t in 4.:0.001:5.]) for c1 in reactivities
+        cases = [(c1, c2, c3, [t for t in 4.:0.004:6.]) for c1 in reactivities
                                 for c2 in solver_algs for c3 in tolerances]
         cases
 end
@@ -62,7 +62,7 @@ function benchmark_ODE_case(case)
 
         ## Timespan Setting
         # tspan = (0., 10.)
-        tspan = (4., 5.)
+        tspan = (4., 6.)
 
         problem = ODEProblem(point_kinetics.pk!, u0, tspan, p)
         sol = solve(problem, alg(), abstol=atol, reltol=atol*1.e3, saveat=saveat)
@@ -252,9 +252,10 @@ end
 
 
 
-test_sol = reshape(hcat(point_kinetics.Ψ.(0:.002:1., 4.21e-3)...)[1,:], (501,1))
+test_sol = reshape(hcat(point_kinetics.Ψ.(0:.004:2., 4.21e-3)...)[1,:], (501,1))
 test_sol = vcat(ones(500,1), test_sol)
 plot(test_sol)
+plot(dollar_benchmarks[1][3], vars=(1))
 # build_work_precision_plot(dollar_benchmarks[1:108], solvers[1:end], test_sol)
 build_work_precision_plot(dollar_benchmarks[109:end], solvers[1:end], test_sol)
 dollar_benchmarks[1:108]

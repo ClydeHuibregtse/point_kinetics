@@ -46,11 +46,11 @@
 \newlabel{eq:param_6@cref}{{[equation][10][1]1.10}{[1][2][]2}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {1.3}Important Concepts for this Analysis}{2}{subsection.16}}
 \@writefile{thm}{\contentsline {definition}{{Definition}{1.1}{}}{2}{theorem.17}}
-\@writefile{thm}{\contentsline {definition}{{Definition}{1.2}{}}{2}{theorem.18}}
 \citation{Ganopol_accurate}
 \@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Parameters for uranium fast reactor used in this analysis}}{3}{table.14}}
 \newlabel{tab:reactor_params}{{1}{3}{Parameters for uranium fast reactor used in this analysis}{table.14}{}}
 \newlabel{tab:reactor_params@cref}{{[table][1][]1}{[1][2][]3}}
+\@writefile{thm}{\contentsline {definition}{{Definition}{1.2}{}}{3}{theorem.18}}
 \@writefile{thm}{\contentsline {definition}{{Definition}{1.3}{}}{3}{theorem.19}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {1.4}Analytical Jacobian Analysis}{3}{subsection.20}}
 \newlabel{eq:dynamical-system}{{1.11}{3}{Analytical Jacobian Analysis}{equation.21}{}}
@@ -58,44 +58,52 @@
 \newlabel{eq:jacobian-definition}{{1.12}{3}{Analytical Jacobian Analysis}{equation.22}{}}
 \newlabel{eq:jacobian-definition@cref}{{[equation][12][1]1.12}{[1][3][]3}}
 \citation{Analytical}
+\citation{Analytical}
 \@writefile{toc}{\contentsline {subsection}{\numberline {1.5}The Analytical Solution to the Step Insertion}{4}{subsection.23}}
 \newlabel{eq:analytical-step}{{1.13}{4}{The Analytical Solution to the Step Insertion}{equation.24}{}}
 \newlabel{eq:analytical-step@cref}{{[equation][13][1]1.13}{[1][4][]4}}
-\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Left: The analytical solution to the Point Kinetics equations under a $100$ pcm insertion as defined in Eq.\nobreakspace  {}\cref  {eq:analytical-step} with use of the native \texttt  {Float64} precision. Right: The same solution, but instead with \texttt  {Double64} (a $128$ bit floating point number) as the basis. The error is resolved, and the pertinent features are evident. The insertions occur at $t = 5$s.}}{4}{figure.27}}
-\newlabel{fig:single-double-prec}{{1}{4}{Left: The analytical solution to the Point Kinetics equations under a $100$ pcm insertion as defined in Eq.~\cref {eq:analytical-step} with use of the native \texttt {Float64} precision. Right: The same solution, but instead with \texttt {Double64} (a $128$ bit floating point number) as the basis. The error is resolved, and the pertinent features are evident. The insertions occur at $t = 5$s}{figure.27}{}}
-\newlabel{fig:single-double-prec@cref}{{[figure][1][]1}{[1][4][]4}}
+\@writefile{toc}{\contentsline {section}{\numberline {2}Solving the Point Kinetics Equations}{4}{section.31}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Building an Optimal Derivative Defintion}{4}{subsection.32}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Left: The analytical solution to the Point Kinetics equations under a $100$ pcm insertion as defined in Eq.\nobreakspace  {}\cref  {eq:analytical-step} with use of the native \texttt  {Float64} precision. Right: The same solution, but instead with \texttt  {Double64} (a $128$ bit floating point number) as the basis. The error is resolved, and the pertinent features are evident. The insertions occur at $t = 5$s. Note some important defintions for these types of transients. The steep rise at $t = 5$s is refered to as the ``prompt jump", after which, the delayed neutron generation catches up and we see a slower growth in reactor power.}}{5}{figure.27}}
+\newlabel{fig:single-double-prec}{{1}{5}{Left: The analytical solution to the Point Kinetics equations under a $100$ pcm insertion as defined in Eq.~\cref {eq:analytical-step} with use of the native \texttt {Float64} precision. Right: The same solution, but instead with \texttt {Double64} (a $128$ bit floating point number) as the basis. The error is resolved, and the pertinent features are evident. The insertions occur at $t = 5$s. Note some important defintions for these types of transients. The steep rise at $t = 5$s is refered to as the ``prompt jump", after which, the delayed neutron generation catches up and we see a slower growth in reactor power}{figure.27}{}}
+\newlabel{fig:single-double-prec@cref}{{[figure][1][]1}{[1][4][]5}}
 \@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Left: A reproduction of the right plot from \cref  {fig:single-double-prec}. Right: The analytical solution defined in Eq.\nobreakspace  {}\cref  {eq:analytical-step} with a reactivity insertion of $1$\$ or $421$ pcm. Note that the prompt jump is so large that the solution diverges within a thousandth of a second. These two curves represent our test case solutions.}}{5}{figure.29}}
 \newlabel{fig:dollar-insert-analytical}{{2}{5}{Left: A reproduction of the right plot from \cref {fig:single-double-prec}. Right: The analytical solution defined in Eq.~\cref {eq:analytical-step} with a reactivity insertion of $1$\$ or $421$ pcm. Note that the prompt jump is so large that the solution diverges within a thousandth of a second. These two curves represent our test case solutions}{figure.29}{}}
 \newlabel{fig:dollar-insert-analytical@cref}{{[figure][2][]2}{[1][4][]5}}
-\@writefile{toc}{\contentsline {section}{\numberline {2}Solving the Point Kinetics Equations}{5}{section.31}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Building an Optimal Derivative Defintion}{5}{subsection.32}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Metrics for Evaluating Integrator Performance}{5}{subsection.35}}
-\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Left: a branched insertion of $100$ pcm. Right: a smoothed insertion of $100$ pcm.}}{6}{figure.33}}
-\newlabel{fig:branch-smooth}{{3}{6}{Left: a branched insertion of $100$ pcm. Right: a smoothed insertion of $100$ pcm}{figure.33}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Left: a branched insertion of $100$ pcm. Right: a smoothed insertion of $100$ pcm. We use the hyperbolic tangent function with steepness $k=10$: $\frac  {\rho }{2}(\qopname  \relax o{tanh}{(t - 5)k} + 1)$.}}{6}{figure.33}}
+\newlabel{fig:branch-smooth}{{3}{6}{Left: a branched insertion of $100$ pcm. Right: a smoothed insertion of $100$ pcm. We use the hyperbolic tangent function with steepness $k=10$: $\frac {\rho }{2}(\tanh {(t - 5)k} + 1)$}{figure.33}{}}
 \newlabel{fig:branch-smooth@cref}{{[figure][3][]3}{[1][5][]6}}
-\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Computer specifications for this performance analysis.}}{6}{table.39}}
-\newlabel{tab:computer-specs}{{2}{6}{Computer specifications for this performance analysis}{table.39}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Metrics for Evaluating Integrator Performance}{6}{subsection.35}}
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Computer specifications for this performance analysis.}}{6}{table.40}}
+\newlabel{tab:computer-specs}{{2}{6}{Computer specifications for this performance analysis}{table.40}{}}
 \newlabel{tab:computer-specs@cref}{{[table][2][]2}{[1][6][]6}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.3}Solving a 100 pcm Step Insertion}{6}{subsection.41}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Left: mean timeseries error and final timepoint error for a branching step insertion. Right: mean timseries error and final timepoint error for the hyperbolic tangent smoothed insertion. }}{7}{figure.45}}
-\newlabel{fig:low-tol-both}{{4}{7}{Left: mean timeseries error and final timepoint error for a branching step insertion. Right: mean timseries error and final timepoint error for the hyperbolic tangent smoothed insertion}{figure.45}{}}
-\newlabel{fig:low-tol-both@cref}{{[figure][4][]4}{[1][6][]7}}
-\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Left: mean timeseries error and final timepoint error for a branching step insertion. Right: mean timseries error and final timepoint error for the hyperbolic tangent smoothed insertion. }}{8}{figure.47}}
-\newlabel{fig:high-tol-both}{{5}{8}{Left: mean timeseries error and final timepoint error for a branching step insertion. Right: mean timseries error and final timepoint error for the hyperbolic tangent smoothed insertion}{figure.47}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.3}Solving a 100 pcm Step Insertion}{6}{subsection.42}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Left: mean timeseries error and final timepoint error for a branching step insertion. Right: mean timseries error and final timepoint error for the hyperbolic tangent smoothed insertion. }}{7}{figure.46}}
+\newlabel{fig:low-tol-both}{{4}{7}{Left: mean timeseries error and final timepoint error for a branching step insertion. Right: mean timseries error and final timepoint error for the hyperbolic tangent smoothed insertion}{figure.46}{}}
+\newlabel{fig:low-tol-both@cref}{{[figure][4][]4}{[1][7][]7}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Left: mean timeseries error and final timepoint error for a branching step insertion. Right: mean timseries error and final timepoint error for the hyperbolic tangent smoothed insertion. }}{8}{figure.48}}
+\newlabel{fig:high-tol-both}{{5}{8}{Left: mean timeseries error and final timepoint error for a branching step insertion. Right: mean timseries error and final timepoint error for the hyperbolic tangent smoothed insertion}{figure.48}{}}
 \newlabel{fig:high-tol-both@cref}{{[figure][5][]5}{[1][7][]8}}
-\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Left: error as a function of time for CVODE\_BDF with branched insertion. Right: error as a function of time for same algorithm but with smoothed insertion. Both plots begin at the time of insertion.}}{8}{figure.49}}
-\newlabel{fig:timeseries-error}{{6}{8}{Left: error as a function of time for CVODE\_BDF with branched insertion. Right: error as a function of time for same algorithm but with smoothed insertion. Both plots begin at the time of insertion}{figure.49}{}}
-\newlabel{fig:timeseries-error@cref}{{[figure][6][]6}{[1][8][]8}}
-\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Left: number of steps required to solve Point Kinetics equations with branching insertion. Right: number of steps required to solve with a smoothed insertion. Note that Rosenbrock23 took far too many steps in the smoothed case to warrant plotting, and that LSODA does not support the counting of steps during its solve.}}{9}{figure.51}}
-\newlabel{fig:num-steps}{{7}{9}{Left: number of steps required to solve Point Kinetics equations with branching insertion. Right: number of steps required to solve with a smoothed insertion. Note that Rosenbrock23 took far too many steps in the smoothed case to warrant plotting, and that LSODA does not support the counting of steps during its solve}{figure.51}{}}
-\newlabel{fig:num-steps@cref}{{[figure][7][]7}{[1][9][]9}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.4}Solving a 421pcm Insertion}{9}{subsection.53}}
-\@writefile{toc}{\contentsline {section}{\numberline {3}Conclusions}{9}{section.54}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Left: error as a function of time for CVODE\_BDF with branched insertion. Right: error as a function of time for same algorithm but with smoothed insertion. Both plots begin at the time of insertion.}}{9}{figure.50}}
+\newlabel{fig:timeseries-error}{{6}{9}{Left: error as a function of time for CVODE\_BDF with branched insertion. Right: error as a function of time for same algorithm but with smoothed insertion. Both plots begin at the time of insertion}{figure.50}{}}
+\newlabel{fig:timeseries-error@cref}{{[figure][6][]6}{[1][8][]9}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Left: number of steps required to solve Point Kinetics equations with branching insertion. Right: number of steps required to solve with a smoothed insertion. Note that Rosenbrock23 took far too many steps in the smoothed case to warrant plotting, and that LSODA does not support the counting of steps during its solve.}}{9}{figure.52}}
+\newlabel{fig:num-steps}{{7}{9}{Left: number of steps required to solve Point Kinetics equations with branching insertion. Right: number of steps required to solve with a smoothed insertion. Note that Rosenbrock23 took far too many steps in the smoothed case to warrant plotting, and that LSODA does not support the counting of steps during its solve}{figure.52}{}}
+\newlabel{fig:num-steps@cref}{{[figure][7][]7}{[1][8][]9}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.4}Solving a 421pcm Insertion}{9}{subsection.54}}
+\citation{Ganopol_accurate}
+\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces Left: branched insertion of $1$\$ reactivity with high tolerances. Right: smoothed insertion of $1$\$ with high tolerances}}{10}{figure.55}}
+\newlabel{fig:high-tol-both-dollar}{{8}{10}{Left: branched insertion of $1$\$ reactivity with high tolerances. Right: smoothed insertion of $1$\$ with high tolerances}{figure.55}{}}
+\newlabel{fig:high-tol-both-dollar@cref}{{[figure][8][]8}{[1][9][]10}}
 \bibstyle{siamplain}
 \bibdata{references}
 \bibcite{Ganopol_accurate}{1}
 \bibcite{Dynamics}{2}
 \bibcite{Keepin}{3}
 \bibcite{Serpent}{4}
+\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces Left: branched insertion of $1$\$ reactivity with low tolerances. Right: smoothed insertion of $1$\$ with low tolerances}}{11}{figure.57}}
+\newlabel{fig:low-tol-both-dollar}{{9}{11}{Left: branched insertion of $1$\$ reactivity with low tolerances. Right: smoothed insertion of $1$\$ with low tolerances}{figure.57}{}}
+\newlabel{fig:low-tol-both-dollar@cref}{{[figure][9][]9}{[1][10][]11}}
+\@writefile{toc}{\contentsline {section}{\numberline {3}Conclusions}{11}{section.59}}
+\@writefile{toc}{\contentsline {section}{References}{11}{section*.60}}
 \bibcite{Analytical}{5}
-\@writefile{toc}{\contentsline {section}{References}{10}{section*.55}}

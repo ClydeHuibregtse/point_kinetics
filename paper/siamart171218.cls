@@ -1,16 +1,16 @@
 %%
 %% This is file `siamart171218.cls', based on article.cls
 %% Revision of siam macros for use with LaTeX 2e
-%% 
+%%
 %% December 2017
 %%
-%% Minor updates including setting item numbering back to "by section" 
+%% Minor updates including setting item numbering back to "by section"
 %% by default.
-%% 
-%% You are not allowed to change this file. 
-%% 
-%% You are allowed to distribute this file under the condition that 
-%% it is distributed together with all of the files in the siam macro 
+%%
+%% You are not allowed to change this file.
+%%
+%% You are allowed to distribute this file under the condition that
+%% it is distributed together with all of the files in the siam macro
 %% distribution. These are:
 %%
 %% * siamart171218.cls: Main LaTeX class file (this file)
@@ -22,14 +22,14 @@
 %% * ex_supplement.tex: Template for supplement
 %% * ex_shared.tex: Template for article/supplement shared info
 %%
-%% If you receive only some of these files from someone, complain! 
-%% 
+%% If you receive only some of these files from someone, complain!
+%%
 %% Please submit suggestions for changes to tex@siam.org.
-%% 
-%% You are NOT ALLOWED to distribute this file alone. You are NOT 
-%% ALLOWED to take money for the distribution or use of either this 
-%% file or a changed version, except for a nominal charge for copying 
-%% etc. 
+%%
+%% You are NOT ALLOWED to distribute this file alone. You are NOT
+%% ALLOWED to take money for the distribution or use of either this
+%% file or a changed version, except for a nominal charge for copying
+%% etc.
 %% \CharacterTable
 %%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
 %%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
@@ -169,7 +169,7 @@
 %%
 \DeclareOption{translated}{\@translatedtrue} % jan 7 2004
 %\DeclareOption{openbib}{\@openbibtrue}
-\ExecuteOptions{letterpaper,10pt,twoside,onecolumn,leqno,draft,notitlepage}
+\ExecuteOptions{letterpaper,10pt,twoside,onecolumn,leqno,notitlepage}
 \ProcessOptions
 %
 % eliminate siam10.clo altogether:
@@ -220,10 +220,10 @@
 \setlength\headsep   {.2in}
 %\setlength\topskip   {10\p@}
 \setlength\footskip{.2in}
-\if@compatibility 
+\if@compatibility
  \setlength\maxdepth{4\p@}
 \else
- \setlength\maxdepth{.5\topskip} 
+ \setlength\maxdepth{.5\topskip}
 \fi
 \setlength\@maxdepth\maxdepth
 \if@compatibility
@@ -378,10 +378,10 @@
 %  \renewcommand{\@evenhead}{}%
 %  \renewcommand{\@evenfoot}{\hfil\footnotesize\textrm{\thepage}\hfil}%
 %  \renewcommand{\@oddfoot}{\@evenfoot}}
-%  
+%
 %  \def\copyrightfooter#1{\gdef\@copyrightfooter{#1}}
 %  \gdef\@copyrightfooter{}
-%  
+%
 %%%add copyright footer, per SIAM
 %  \renewcommand{\ps@plain}{\let\@mkboth\@gobbletwo%
 %  \renewcommand{\@oddhead}{}%
@@ -420,7 +420,7 @@
         \markright {\ifnum \c@secnumdepth >\@ne
             \thesubsection\hskip 1em\relax \fi
             ##1}}}
-            
+
 
 %\def\ps@myheadings{%
 %    \renewcommand{\@oddfoot}{\hfil\vtop{\hsize\textwidth\centering\footnotesize\textrm{\strut}\\[4pt] \@copyrightfooter}\hfil}\let\@evenfoot\@oddfoot%
@@ -499,9 +499,9 @@ Vol.\ #3, No.\ #4, pp.\ #5
 %
 \if@translated
 \newcommand\tpa{T{\fiveptsize HEORY}~P{\fiveptsize ROBAB.}~A{\fiveptsize PPL}}% added 1/7/04
-\def\@translation{Translated from Russian Journal}  
+\def\@translation{Translated from Russian Journal}
 \else%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\newcommand\tpa{T{\fiveptsize HEORY}~P{\fiveptsize ROBAB.}~A{\fiveptsize PPL}}% added 1/7/04  
+\newcommand\tpa{T{\fiveptsize HEORY}~P{\fiveptsize ROBAB.}~A{\fiveptsize PPL}}% added 1/7/04
 \fi
 %
 \def\@slugger{}
@@ -533,7 +533,7 @@ Vol.\ #3, No.\ #4, pp.\ #5
 %% Support for supplementary materials
     {\bfseries\MakeUppercase{\siampretitle}\@ucnothanks{\@title}\par}%
 %%
-%% <<tgk<< 
+%% <<tgk<<
 %%
     \vskip .075in%
     {\footnotesize
@@ -551,7 +551,7 @@ Vol.\ #3, No.\ #4, pp.\ #5
 %% Fixed capitalization to work with macro for title
 \def\@ucnt#1\thanks{\uppercase\expandafter{#1}\futurelet\@tempa\@ucnta}
 %%
-%% <<tgk<< 
+%% <<tgk<<
 %%
 \def\@ucnta{\ifx\@tempa\relax\else\@ucntb\fi}
 \def\@ucntb#1\thanks\relax{\thanks{#1}}
@@ -586,9 +586,9 @@ Vol.\ #3, No.\ #4, pp.\ #5
 \newcommand\siopt{SIAM J.\ O{\fiveptsize PTIM}}
 \newcommand\sisc{SIAM J.\ S{\fiveptsize CI}.\ C{\fiveptsize OMPUT}}
 \newcommand\sirev{SIAM R{\fiveptsize EV}}
-\newcommand\mms{M{\fiveptsize ULTISCALE}~M{\fiveptsize ODEL}.~S{\fiveptsize IMUL}} % Added 9/17/02  
-   
-        
+\newcommand\mms{M{\fiveptsize ULTISCALE}~M{\fiveptsize ODEL}.~S{\fiveptsize IMUL}} % Added 9/17/02
+
+
 \setcounter{secnumdepth}{3}
 \newcounter {section}
 \newcounter {subsection}[section]
@@ -617,10 +617,10 @@ Vol.\ #3, No.\ #4, pp.\ #5
 
 
 \def\@sect#1#2#3#4#5#6[#7]#8{\ifnum #2>\c@secnumdepth
-     \def\@svsec{}\else 
+     \def\@svsec{}\else
      \refstepcounter{#1}\edef\@svsec{\csname the#1\endcsname.\hskip .5em }\fi
      \@tempskipa #5\relax
-      \ifdim \@tempskipa>\z@ 
+      \ifdim \@tempskipa>\z@
         \begingroup #6\relax
           \@hangfrom{\hskip #3\relax\@svsec}{\interlinepenalty \@M #8\par}
         \endgroup
@@ -641,7 +641,7 @@ Vol.\ #3, No.\ #4, pp.\ #5
    \else \def\@svsechd{#4\hskip #1\relax #5\@mypunct}\fi
     \@xsect{#3}}
 
-              
+
 \newcommand\section{\@startsection{section}{1}{.25in}%
                                    {1.3ex \@plus .5ex \@minus .2ex}%
                                    {-.5em \@plus -.1em}%
@@ -715,14 +715,14 @@ Vol.\ #3, No.\ #4, pp.\ #5
                {\begin{list}{{\upshape \arabic{muni}.}}{\usecounter{muni}
                 \setlength{\leftmargin}{0pt}
                 \setlength{\itemindent}{38pt}}}{\end{list}}
-                                
+
 \newenvironment{@abssec}[1]{%
      \if@twocolumn
        \section*{#1}%
      \else
        \vspace{.05in}\footnotesize
        \parindent .2in
-         {\upshape\bfseries #1. }\ignorespaces 
+         {\upshape\bfseries #1. }\ignorespaces
      \fi}
      {\if@twocolumn\else\par\vspace{.1in}\fi}
 
@@ -765,7 +765,7 @@ Vol.\ #3, No.\ #4, pp.\ #5
                {\list{}{\rightmargin\leftmargin}%
                 \item[]}
                {\endlist}
-               
+
 %\def\@begintheorem#1#2{\vspace{\abovedisplayskip}\par\bgroup{\scshape #1\ #2. }\it\ignorespaces}
 %\def\@opargbegintheorem#1#2#3{\par\bgroup%
 %   {\scshape #1\ #2\ ({\upshape #3}). }\it\ignorespaces}
@@ -791,7 +791,7 @@ Vol.\ #3, No.\ #4, pp.\ #5
 
 %%
 %% >>tgk>> --- Removed Summer 2015 ---
-%% 
+%%
 %\newcommand{\insertsectionspace}{\addvspace{\@sectionspace}}
 %\newcommand{\removesectionspace}{\vspace{\@negsectionspace}} %I didn't end up needing these, but they might be needed somewhere
 %
@@ -831,11 +831,11 @@ Vol.\ #3, No.\ #4, pp.\ #5
 % message to appear.  If this happens it will be necessary to update the
 % definition of  \@tempb below and incorperate the changes into
 % the new definitions of \eqnarray.
- 
- 
+
+
 % This is the current definition of \eqnarray for the fleqn document style
 % latex.ltx
- 
+
 \def\@tempb{%
    \stepcounter{equation}%
    \def\@currentlabel{\p@equation\theequation}%
@@ -872,7 +872,7 @@ Vol.\ #3, No.\ #4, pp.\ #5
 }
 \else    \typeout{Warning: Unable to fix unknown version of \string\eqnarray.}
 \fi
- 
+
 \def\@tempb{}
 
 %%
@@ -916,7 +916,7 @@ Vol.\ #3, No.\ #4, pp.\ #5
   \renewcommand{\section}{\secdef\append\sappend}
   \newcommand{\appendixnotitle}{%
     \refstepcounter{section}%
-    {\par\addvspace{\@sectionspace} 
+    {\par\addvspace{\@sectionspace}
       \reset@font\normalsize\bfseries\appendixname\ \thesection. \gobblepars}%
     \addcontentsline{toc}{section}{\appendixname~\thesection}%
     }
@@ -924,19 +924,19 @@ Vol.\ #3, No.\ #4, pp.\ #5
 
 \newcommand\append[2][?]{%
   \refstepcounter{section}%
-  {\par\addvspace{\@sectionspace} 
+  {\par\addvspace{\@sectionspace}
     \reset@font\normalsize\bfseries\appendixname\ \thesection. #2\@mypunct{} }%
   \addcontentsline{toc}{section}{\appendixname~\thesection. #2}%
   \gobblepars
 }
 
 \newcommand\sappend[1]{%
-  {\par\addvspace{\@sectionspace} 
+  {\par\addvspace{\@sectionspace}
     \reset@font\normalsize\bfseries#1\@mypunct{} }%
   \addcontentsline{toc}{section}{#1}%
   \gobblepars
 }
-%% 
+%%
 %% <<tgk<<
 %%
 
@@ -1134,7 +1134,7 @@ Vol.\ #3, No.\ #4, pp.\ #5
 %   \if@oneeqnum
 %   \else
 %      \@addtoreset{equation}{section}   %  \section resets 'equation' counter
-%      \renewcommand{\theequation}{\thesection.\arabic{equation}}  
+%      \renewcommand{\theequation}{\thesection.\arabic{equation}}
 %   \fi
 %
 %   \if@onefignum
@@ -1300,7 +1300,7 @@ Vol.\ #3, No.\ #4, pp.\ #5
 %% <<tgk<<
 %%
 %% >>tgk>> --- Added Summer 2015 ---
-%% 
+%%
 \RequirePackage{xcolor}[2.11]
 \colorlet{siaminlinkcolor}{green!50!black}
 \colorlet{siamexlinkcolor}{red!50!black}
@@ -1309,9 +1309,9 @@ Vol.\ #3, No.\ #4, pp.\ #5
 %% <<tgk<<
 %%
 %% >>tgk>> --- Added Summer 2015 ---
-%% 
+%%
 %% Add support for color in order to color the hyperlinks.
-%% 
+%%
 \if@hidelinks
 \hypersetup{ hidelinks = true }
 \else
@@ -1327,7 +1327,7 @@ Vol.\ #3, No.\ #4, pp.\ #5
 \newcommand{\email}[1]{\protect\href{mailto:#1}{#1}}
 %%
 %% >>tgk>> --- Modified Summer 2015 ---
-%% 
+%%
 \newcommand{\mref}[1]{\burlalt{mailto:#1}{#1}}
 %%
 %% <<tgk<<
@@ -1335,7 +1335,7 @@ Vol.\ #3, No.\ #4, pp.\ #5
 %% >>tgk>> --- Removed Summer 2015 ---
 %\newcommand{\web}[1]{\href{#1}{#1}}
 %%
-%% <<tgk<< 
+%% <<tgk<<
 %%
 
 %%%\pagecolor{softpage}
@@ -1564,14 +1564,14 @@ Vol.\ #3, No.\ #4, pp.\ #5
   \linenumbers
   \renewcommand{\linenumberfont}{\normalfont\footnotesize\color{siamreviewcolor}}
   % The \linenumbers command does not play nice with amsmath, so we
-  % have added some patches to fix it. See   
+  % have added some patches to fix it. See
   % http://phaseportrait.blogspot.com/2007/08/lineno-and-amsmath-compatibility.html
   \newcommand*\patchAmsMathEnvironmentForLineno[1]{%
     \expandafter\let\csname old#1\expandafter\endcsname\csname #1\endcsname
     \expandafter\let\csname oldend#1\expandafter\endcsname\csname end#1\endcsname
     \renewenvironment{#1}%
     {\linenomath\csname old#1\endcsname}%
-    {\csname oldend#1\endcsname\endlinenomath}}% 
+    {\csname oldend#1\endcsname\endlinenomath}}%
   \newcommand*\patchBothAmsMathEnvironmentsForLineno[1]{%
     \patchAmsMathEnvironmentForLineno{#1}%
     \patchAmsMathEnvironmentForLineno{#1*}}%
@@ -1603,7 +1603,7 @@ Vol.\ #3, No.\ #4, pp.\ #5
   \DeclareGraphicsExtensions{.eps}
 \fi
 
-%_%_%_%_% fixes a bug in ntheorem; % ending first line prevents 
+%_%_%_%_% fixes a bug in ntheorem; % ending first line prevents
 %_%_%_%_% misalignment of equation numbers in eqnarray
 \gdef\PotEndMark#1{%
 \@ifnextchar[%]
@@ -1644,7 +1644,5 @@ Vol.\ #3, No.\ #4, pp.\ #5
 \fi
 
 \endinput
-%% 
+%%
 %% End of file `siamart171218.cls'.
-
-
