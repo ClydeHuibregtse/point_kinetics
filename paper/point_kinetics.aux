@@ -70,8 +70,8 @@
 \@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Left: A reproduction of the right plot from \cref  {fig:single-double-prec}. Right: The analytical solution defined in Eq.\nobreakspace  {}\cref  {eq:analytical-step} with a reactivity insertion of $1$\$ or $421$ pcm. Note that the prompt jump is so large that the solution diverges within a thousandth of a second. These two curves represent our test case solutions.}}{5}{figure.29}}
 \newlabel{fig:dollar-insert-analytical}{{2}{5}{Left: A reproduction of the right plot from \cref {fig:single-double-prec}. Right: The analytical solution defined in Eq.~\cref {eq:analytical-step} with a reactivity insertion of $1$\$ or $421$ pcm. Note that the prompt jump is so large that the solution diverges within a thousandth of a second. These two curves represent our test case solutions}{figure.29}{}}
 \newlabel{fig:dollar-insert-analytical@cref}{{[figure][2][]2}{[1][4][]5}}
-\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Left: a branched insertion of $100$ pcm. Right: a smoothed insertion of $100$ pcm. We use the hyperbolic tangent function with steepness $k=10$: $\frac  {\rho }{2}(\qopname  \relax o{tanh}{(t - 5)k} + 1)$.}}{6}{figure.33}}
-\newlabel{fig:branch-smooth}{{3}{6}{Left: a branched insertion of $100$ pcm. Right: a smoothed insertion of $100$ pcm. We use the hyperbolic tangent function with steepness $k=10$: $\frac {\rho }{2}(\tanh {(t - 5)k} + 1)$}{figure.33}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Left: a branched insertion of $100$ pcm. Right: a smoothed insertion of $100$ pcm. We use the hyperbolic tangent function with steepness $k=10$: $\frac  {\rho }{2}(\qopname  \relax o{tanh}{k(t - 5)} + 1)$.}}{6}{figure.33}}
+\newlabel{fig:branch-smooth}{{3}{6}{Left: a branched insertion of $100$ pcm. Right: a smoothed insertion of $100$ pcm. We use the hyperbolic tangent function with steepness $k=10$: $\frac {\rho }{2}(\tanh {k(t - 5)} + 1)$}{figure.33}{}}
 \newlabel{fig:branch-smooth@cref}{{[figure][3][]3}{[1][5][]6}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Metrics for Evaluating Integrator Performance}{6}{subsection.35}}
 \@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Computer specifications for this performance analysis.}}{6}{table.40}}
@@ -87,23 +87,23 @@
 \@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Left: error as a function of time for CVODE\_BDF with branched insertion. Right: error as a function of time for same algorithm but with smoothed insertion. Both plots begin at the time of insertion.}}{9}{figure.50}}
 \newlabel{fig:timeseries-error}{{6}{9}{Left: error as a function of time for CVODE\_BDF with branched insertion. Right: error as a function of time for same algorithm but with smoothed insertion. Both plots begin at the time of insertion}{figure.50}{}}
 \newlabel{fig:timeseries-error@cref}{{[figure][6][]6}{[1][8][]9}}
-\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Left: number of steps required to solve Point Kinetics equations with branching insertion. Right: number of steps required to solve with a smoothed insertion. Note that Rosenbrock23 took far too many steps in the smoothed case to warrant plotting, and that LSODA does not support the counting of steps during its solve.}}{9}{figure.52}}
-\newlabel{fig:num-steps}{{7}{9}{Left: number of steps required to solve Point Kinetics equations with branching insertion. Right: number of steps required to solve with a smoothed insertion. Note that Rosenbrock23 took far too many steps in the smoothed case to warrant plotting, and that LSODA does not support the counting of steps during its solve}{figure.52}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Left: number of steps required to solve Point Kinetics equations with branching insertion. Right: number of steps required to solve with a smoothed insertion. Note that LSODA does not support the counting of steps during its solve. Also, we omit Rosenbrock23 as it takes too many steps in both cases to warrant plotting.}}{9}{figure.52}}
+\newlabel{fig:num-steps}{{7}{9}{Left: number of steps required to solve Point Kinetics equations with branching insertion. Right: number of steps required to solve with a smoothed insertion. Note that LSODA does not support the counting of steps during its solve. Also, we omit Rosenbrock23 as it takes too many steps in both cases to warrant plotting}{figure.52}{}}
 \newlabel{fig:num-steps@cref}{{[figure][7][]7}{[1][8][]9}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.4}Solving a 421pcm Insertion}{9}{subsection.54}}
 \citation{Ganopol_accurate}
 \@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces Left: branched insertion of $1$\$ reactivity with high tolerances. Right: smoothed insertion of $1$\$ with high tolerances}}{10}{figure.55}}
 \newlabel{fig:high-tol-both-dollar}{{8}{10}{Left: branched insertion of $1$\$ reactivity with high tolerances. Right: smoothed insertion of $1$\$ with high tolerances}{figure.55}{}}
 \newlabel{fig:high-tol-both-dollar@cref}{{[figure][8][]8}{[1][9][]10}}
+\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces Left: branched insertion of $1$\$ reactivity with low tolerances. Right: smoothed insertion of $1$\$ with low tolerances}}{11}{figure.57}}
+\newlabel{fig:low-tol-both-dollar}{{9}{11}{Left: branched insertion of $1$\$ reactivity with low tolerances. Right: smoothed insertion of $1$\$ with low tolerances}{figure.57}{}}
+\newlabel{fig:low-tol-both-dollar@cref}{{[figure][9][]9}{[1][10][]11}}
+\@writefile{toc}{\contentsline {section}{\numberline {3}Conclusions and Future Research}{11}{section.59}}
 \bibstyle{siamplain}
 \bibdata{references}
 \bibcite{Ganopol_accurate}{1}
 \bibcite{Dynamics}{2}
 \bibcite{Keepin}{3}
 \bibcite{Serpent}{4}
-\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces Left: branched insertion of $1$\$ reactivity with low tolerances. Right: smoothed insertion of $1$\$ with low tolerances}}{11}{figure.57}}
-\newlabel{fig:low-tol-both-dollar}{{9}{11}{Left: branched insertion of $1$\$ reactivity with low tolerances. Right: smoothed insertion of $1$\$ with low tolerances}{figure.57}{}}
-\newlabel{fig:low-tol-both-dollar@cref}{{[figure][9][]9}{[1][10][]11}}
-\@writefile{toc}{\contentsline {section}{\numberline {3}Conclusions}{11}{section.59}}
-\@writefile{toc}{\contentsline {section}{References}{11}{section*.60}}
 \bibcite{Analytical}{5}
+\@writefile{toc}{\contentsline {section}{References}{12}{section*.60}}

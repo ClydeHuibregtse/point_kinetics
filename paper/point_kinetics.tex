@@ -33,7 +33,7 @@
 
 % Title. If the supplement option is on, then "Supplementary Material"
 % is automatically inserted before the title.
-\title{Point Kinetics\thanks{Submitted to the editors DATE.}}
+\title{Benchmarking the Point Reactor Kinetics Equations with \texttt{Julia}'s \texttt{DifferentialEqautions.jl}}
 
 
 % Authors: full names plus addresses.
@@ -90,11 +90,15 @@ was created. Then, using both a $100$ pcm and $1$\$ step insertion as test
 cases, a solver analysis was completed to measure the relative performance of native
 and non-native algorithms. It was found that, contrary to what is expected for small
 systems such as these, non-native algorithms such as LSODA, CVODE\_BDF, and RADAU5
-drastically outperformed the native \texttt{Julia} algorithms. Some native implementations,
+drastically outperformed the native \texttt{Julia} algorithms in the $100$ pcm insertion case.
+Some native implementations,
 such as RadauIIA5 met the standard set by the algorithms listed above, but in general,
 most performed considerably worse by all metrics. The high performing algorithms (both
 native and non-native) saw an increase in solution speed when the step insertion was
 smoothed, without an unmanageable loss in accuracy for the purposes of this simulator.
+Additonally, at low tolerances, some algorithms (LSODA, CVODE\_BDF, RADAU5, and RadauIIA5)
+proved to achieve moderately low error in the $1$\$ insertion case when compared
+to the industry standards.
 \end{abstract}
 
 % REQUIRED
@@ -152,7 +156,7 @@ results of fission-product decay significantly later than the prompt
 generation.
 
 \begin{equation}
-  S(\vec{r}, t) = \underbrace{(1-\beta)k_{\infty}\Sigma_avN}_{\text{prompt generation}} + \underbrace{\Sigma_i\lambda_iC_i}_{\text{delay generation}}
+  S(\vec{r}, t) = \underbrace{(1-\beta)k_{\infty}\Sigma_avN(\vec{r}, t)}_{\text{prompt generation}} + \underbrace{\Sigma_i\lambda_iC_i(\vec{r}, t)}_{\text{delay generation}}
   \label{eq:prompt-delay}\cite{Dynamics}
 \end{equation}
 
@@ -160,7 +164,7 @@ The proportionality constants shown in Eq.~\cref{eq:prompt-delay} help to
 establish that the the prompt and delayed neutrons are generated according to
 the fractions $1-\beta$ and $\beta$ respectively. The critical takeaway, however,
 is that $C_i$ refers to the current concentration
-of ``delayed neutron group" $i$. It has been shown that the inclusion of six
+of ``delayed neutron group" $i$ as a function of time and space. It has been shown that the inclusion of six
 delayed neutron groups constitutes a reasonably accurate approximation of reactor
 dynamics.\cite{Keepin} \\
 
@@ -247,7 +251,7 @@ features of a reactor transient.
 The form of the ODE defined in Eqs.~\cref{eq:reac-power,eq:delayed-groups},
 lead to an analytical definition of this system's Jacobian.\cite{Ganopol_accurate}
 Particularly, our system is as defined in Eq.~\cref{eq:dynamical-system}, so
-there exists a true form of the Jacobian, shown in Eq.~\cref{eq:jacobian-definition}.
+there exists a time dependent form of the Jacobian, shown in Eq.~\cref{eq:jacobian-definition}.
 
 \begin{align}
   \label{eq:dynamical-system}
@@ -342,7 +346,7 @@ solution to the point kinetics equations under a step insertion of $1$\$.\\
 \end{figure}
 
 These two curves are a baseline to which we compare all of our computed solutions,
-giving a quantifiable metric for accuracy in both tranients.
+giving a quantifiable metric for accuracy in both transients.
 
 \section{Solving the Point Kinetics Equations}
 
@@ -359,7 +363,7 @@ our two \texttt{@view} macro calls), totalling only $96$ bytes. \\
 
 Now we can use the type inferencing capabilities of \texttt{Julia}'s JIT compiler
 to speed up our solves. To achieve type stability, we define an abstract type family,
-\texttt{AbstractInsert}, that handles arbitraty reactivity insertion functions.
+\texttt{AbstractInsert}, that handles arbitrary reactivity insertion functions.
 This allows the parameters used within the inner loop to be fully type stable.
 The \texttt{@code\_warntype} macro shows no potential type
 ambiguities throughout our inner loop, so we can be assured the JIT compiler is
@@ -389,7 +393,7 @@ options are shown in \cref{fig:branch-smooth}
   \includegraphics[width=0.5\textwidth]{../plots/insertion-plots/branch.png}
   \includegraphics[width=0.5\textwidth]{../plots/insertion-plots/smooth.png}
   \caption{Left: a branched insertion of $100$ pcm. Right: a smoothed insertion of $100$ pcm. We
-  use the hyperbolic tangent function with steepness $k=10$: $\frac{\rho}{2}(\tanh{(t - 5)k} + 1)$.}
+  use the hyperbolic tangent function with steepness $k=10$: $\frac{\rho}{2}(\tanh{k(t - 5)} + 1)$.}
   \label{fig:branch-smooth}
 \end{figure}
 
@@ -488,7 +492,7 @@ we see similar trends to the
 low tolerance cases, though with some variation in accuracy. Again, from a holistic
 viewpoint, both LSODA and CVODE\_BDF seem to outperform all other solvers, particularly with
 respect to their runtimes. However, RADAU5 and RadauIIA5 make a strong case for accuracy at higher
-tolerances at the expence of a few 10ths of a millisecond per run. Once again, the KenCarp methods
+tolerances at the expense of a few 10ths of a millisecond per run. Once again, the KenCarp methods
 and TRBDF2 perform quite poorly. The same can be said about the results from the smoothed
 case, however with an overall reduction in average runtime across all solvers. \\
 
@@ -524,15 +528,16 @@ each solver in \cref{fig:num-steps}. \\
   \includegraphics[width=0.5\textwidth]{../plots/step-plots/tanhinserts.png}
   \caption{Left: number of steps required to solve Point Kinetics equations with
   branching insertion. Right: number of steps required to solve with a smoothed
-  insertion. Note that Rosenbrock23 took far too many steps in the smoothed case
-  to warrant plotting, and that LSODA does not support the counting of steps during
-  its solve.}
+  insertion. Note that LSODA does not support the counting of steps during
+  its solve. Also, we omit Rosenbrock23 as it takes too many steps in both cases
+  to warrant plotting.}
   \label{fig:num-steps}
 \end{figure}
 
 Here we have some interesting results. There are a few algorithms whose number of
 steps worsens through smoothing (particularly our regular poor performers Rosenbrock23
-and DOPRI5). More importantly, though, our faster algorithms such as CVODE\_BDF and
+and DOPRI5, as well as RODAS which performs moderately well otherwise).
+More importantly, though, our faster algorithms such as CVODE\_BDF and
 RADAU5/RadauIIA5 drastically decrease in the number of steps required and therefore
 the required runtime.
 
@@ -554,7 +559,7 @@ The results are compiled in \cref{fig:high-tol-both-dollar}.
   Right: smoothed insertion of $1$\$ with high tolerances}
   \label{fig:high-tol-both-dollar}
 \end{figure}
-Here, it is clear that the looseness in our rolerance settings has allowed for
+Here, it is clear that the looseness in our tolerance settings has allowed for
 an error that makes these solutions unusable. The final timepoint of the analytical
 solution under the dollar insertion is on the order of $10^8$, and these solutions
 (with the exception of a few more accurate performers like RADAU5 and RadauIIA5)
@@ -576,7 +581,7 @@ The work precision diagrams for these tolerances are compiled in \cref{fig:low-t
 Right away, we can exclude our smoothed insertion results. All solvers essentially performed
 the same, and with very high error, and no time improvement over the branched input.
 The volatile nature of this transient is such that smoothing introduced far too much
-error to the solution. This likely increased runtimes the smoothing enlarged the duration
+error to the solution. This likely increased runtimes as the smoothing elongated the duration
 of the insertion, meaning the solvers were under small timestepping constraints for
 much longer, drowning out any of the improvements we see in the $100$ pcm case. \\
 
@@ -590,10 +595,10 @@ special case of Backwards Euler created by Barry Ganopol (colloquially referred 
 the ``neutron transport cowboy" in the nuclear industry)
 that are the gold standard for highly accurate results under these
 large insertions. \cite{Ganopol_accurate} Nonetheless, for the purposes of handling
-a wide variety of transients the top algorithms described in this analysis are
+a wide variety of transients, the top algorithms described in this analysis are
 perfect for fast, iterative reactor design.
 
-\section{Conclusions}
+\section{Conclusions and Future Research}
 The objective of this analysis was threefold: (1) develop an optimal \texttt{Julia}
 Point Kinetics simulator, (2) analyze the performance of various native and non-native
 solution algorithms on a particular reactor transient, and (3) prescribe an algorithm
@@ -607,7 +612,15 @@ branched case anyway). Finally, in the interest of qualifying these solution alg
 against the peak of the nuclear academic community, we completed an analysis of the $1$\$
 insertion case. While their performance does not match that of the top-shelf methods
 used in academia for $1$\$ insertions, these algorithms showed enough accuracy under the
-most extreme cases to warrant their use in iterative reactor design models.
+most extreme cases to warrant their use in iterative reactor design models. \\
+
+Next, we will be adding a thermal response term to the Point Kinetics equations.
+In fact, we are interested in the transfer of heat across various materials in the
+core as a function of the reactor's neutron density. Steps have been taken to accelerate
+the calculation of heat transfer derivatives by making use of Convolutional Neural Networks,
+and the \texttt{CUDNN} library offered by NVIDIA. This has shown promising results in
+GPU accelerations of the pure heat transfer ODEs. Next we will couple the two derivatives
+and benchmark their performance on a core-wide model.
 
 \section*{Acknowledgments}
 A big thank you to Dr. Chris Rackauckas for his incredible help in shaping and debugging

@@ -179,9 +179,9 @@ function build_work_precision_plot(benchmarks, solvers, test_sol)
         idx = 0
 
         wp = true
-        final_tp = true
+        final_tp = false
         high = true
-        tanh = true
+        tanh = false
 
         # benchmarks = tanh ? benchmarks[1:Int(length(benchmarks)/2)] : benchmarks[Int(length(benchmarks)/2)+1:end] end
 
@@ -190,10 +190,12 @@ function build_work_precision_plot(benchmarks, solvers, test_sol)
                 if solver == rodas  ||  solver == KenCarp5 || solver == KenCarp3 || solver== dopri5 continue end
                 tols, times = group_by_alg(benchmarks, solver)
                 powers = group_powers_by_alg(benchmarks, solver)
+
                 errors = abs.(powers .- test_sol)
-
                 mean_errors = mean(errors, dims=1)
-
+                println(errors[end,:])
+                # println(test_sol[end])
+                # break
                 if wp
                         if final_tp
                                 if high
@@ -252,13 +254,15 @@ end
 
 
 
-test_sol = reshape(hcat(point_kinetics.Ψ.(0:.004:2., 4.21e-3)...)[1,:], (501,1))
-test_sol = vcat(ones(500,1), test_sol)
-plot(test_sol)
-plot(dollar_benchmarks[1][3], vars=(1))
-# build_work_precision_plot(dollar_benchmarks[1:108], solvers[1:end], test_sol)
-build_work_precision_plot(dollar_benchmarks[109:end], solvers[1:end], test_sol)
-dollar_benchmarks[1:108]
+test_sol = reshape(hcat(point_kinetics.Ψ.(0:.004:1., 4.21e-3)...)[1,:], (251,1))
+test_sol = vcat(ones(250,1), test_sol)
+# plot(4:.004:6,test_sol)
+# plot!(dollar_benchmarks[12][3], vars=(1))
+# dollar_benchmarks[12][3]#.u[end][1] -  test_sol[end]
+
+build_work_precision_plot(dollar_benchmarks[1:108], solvers[1:end], test_sol)
+# build_work_precision_plot(dollar_benchmarks[109:end], solvers[1:end], test_sol)
+dollar_benchmarks[1:84][end][3].u[end][1] - test_sol[end]
 
 function build_a_sol_plot(rho)
         tspan = [t for t in 0:.01:5]
@@ -274,9 +278,6 @@ function build_a_sol_plot(rho)
         current()
 end
 
-build_a_sol_plot(1.e-3)
-
-benchmarks[1][1][3]
 
 
 
@@ -319,7 +320,7 @@ function plot_steps(steps)
         end
         xlabel!("Absolute Tolerance")
         ylabel!("Number of Total Solve Steps")
-        savefig("plots/step_plots/tanhinserts.png")
+        savefig("plots/step-plots/tanhinserts.png")
         current()
 end
 
