@@ -2,7 +2,7 @@ using DifferentialEquations, Sundials, Plots;
 using LinearAlgebra, BenchmarkTools;
 using Profile;
 
-
+using LSODA;
 
 module point_kinetics
     using DoubleFloats, LinearAlgebra
@@ -124,31 +124,39 @@ module point_kinetics
 end
 using .point_kinetics;
 
+
+
+
+tspan = (0.,10.)
+
+delayed_neutron_fractions = [9, 87, 70, 140, 60, 55] * 1.e-5
+precursor_tcs = [0.0124, 0.0305, 0.111, 0.301, 1.14, 3.01]
+mean_generation_time = 1.e-5
+delayed_neutron_fractions ./ sum(delayed_neutron_fractions)
+step_reac = point_kinetics.StepInsert(1.e-3, 5.)
+# step_reac = point_kinetics.TanhInsert(1.e-3, 5., 10)
+
+
+# plot(1:0.1:10.,ext_reac(1:0.1:10.))
+
+p = point_kinetics.PKparams(step_reac, mean_generation_time,
+        sum(delayed_neutron_fractions), precursor_tcs, delayed_neutron_fractions)
+
+u0 = delayed_neutron_fractions ./ (mean_generation_time .* precursor_tcs)
+u0 = vcat([1.],u0)
+
+prob = ODEProblem(point_kinetics.pk!, u0, tspan, p)
 #
-# tspan = (0.,10.)
-#
-# delayed_neutron_fractions = [9, 87, 70, 140, 60, 55] * 1.e-5
-# precursor_tcs = [0.0124, 0.0305, 0.111, 0.301, 1.14, 3.01]
-# mean_generation_time = 1.e-5
-# delayed_neutron_fractions ./ sum(delayed_neutron_fractions)
-# step_reac = point_kinetics.StepInsert(1.e-3, 5.)
-# # step_reac = point_kinetics.TanhInsert(1.e-3, 5., 10)
-#
-#
-# # plot(1:0.1:10.,ext_reac(1:0.1:10.))
-#
-# p = point_kinetics.PKparams(step_reac, mean_generation_time,
-#         sum(delayed_neutron_fractions), precursor_tcs, delayed_neutron_fractions)
-#
-# u0 = delayed_neutron_fractions ./ (mean_generation_time .* precursor_tcs)
-# u0 = vcat([1.],u0)
-#
-# prob = ODEProblem(point_kinetics.pk!, u0, tspan, p)
-# #
-# sol = solve(prob, KenCarp3(), saveat=0.:0.1:10., atol=1e-12, rtol=1e-9)
-#
-# plot(sol, vars=(1))
-#
+using LinearAlgebra;
+LinearAlgebra.BLAS.set_num_threads(8)
+@benchmark solve(prob, Rodas5(), atol=1e-12, rtol=1e-9)
+@benchmark solve(prob, lsoda(), atol=1e-12, rtol=1e-9)
+
+
+sol = solve(prob, KenCarp3(), saveat=0.:0.1:10., atol=1e-12, rtol=1e-9)
+
+plot(sol, vars=(1))
+
 #
 #
 # @profile for _ in 1:10000 solve(prob, CVODE_BDF(), save_everystep=false, atol=1e-12, rtol=1e-9)end
